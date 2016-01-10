@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: a53927d925c79834ea97fb4d6ef89f3b
-timeCreated: 1452410372
+timeCreated: 1452447754
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -35,7 +35,7 @@ TextureImporter:
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
   grayScaleToAlpha: 0
@@ -60,7 +60,7 @@ TextureImporter:
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaIsTransparency: 1
@@ -75,9 +75,16 @@ TextureImporter:
         y: 399
         width: 55
         height: 54
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.6363636, y: 0.37037036}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 12, y: 34}
+        - {x: -29, y: 6}
+        - {x: -35, y: -5}
+        - {x: -35, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 34}
     - name: CLIFFVEG_1
       rect:
         serializedVersion: 2
@@ -85,9 +92,16 @@ TextureImporter:
         y: 399
         width: 40
         height: 62
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.32258064}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -17, y: 42}
+        - {x: -20, y: 39}
+        - {x: -20, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 38}
+        - {x: 17, y: 42}
     - name: CLIFFVEG_2
       rect:
         serializedVersion: 2
@@ -95,9 +109,16 @@ TextureImporter:
         y: 399
         width: 40
         height: 66
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.3030303}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 46}
+        - {x: -20, y: 44}
+        - {x: -20, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 40}
+        - {x: 14, y: 46}
     - name: CLIFFVEG_3
       rect:
         serializedVersion: 2
@@ -105,9 +126,16 @@ TextureImporter:
         y: 399
         width: 64
         height: 54
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.3125, y: 0.37037036}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 7, y: 34}
+        - {x: -20, y: 34}
+        - {x: -20, y: -20}
+        - {x: 44, y: -20}
+        - {x: 44, y: -6}
+        - {x: 21, y: 32}
     - name: CLIFFVEG_4
       rect:
         serializedVersion: 2
@@ -116,8 +144,13 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_5
       rect:
         serializedVersion: 2
@@ -126,8 +159,13 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_6
       rect:
         serializedVersion: 2
@@ -135,9 +173,14 @@ TextureImporter:
         y: 319
         width: 63
         height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.6825397, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -43, y: 20}
+        - {x: -43, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_7
       rect:
         serializedVersion: 2
@@ -146,8 +189,13 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_8
       rect:
         serializedVersion: 2
@@ -156,8 +204,13 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_9
       rect:
         serializedVersion: 2
@@ -165,9 +218,14 @@ TextureImporter:
         y: 319
         width: 67
         height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.29850745, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -20}
+        - {x: 47, y: -20}
+        - {x: 47, y: 20}
     - name: CLIFFVEG_10
       rect:
         serializedVersion: 2
@@ -175,9 +233,14 @@ TextureImporter:
         y: 239
         width: 63
         height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.6825397, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -43, y: 20}
+        - {x: -43, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_11
       rect:
         serializedVersion: 2
@@ -186,8 +249,13 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_12
       rect:
         serializedVersion: 2
@@ -196,8 +264,13 @@ TextureImporter:
         width: 40
         height: 40
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -20}
+        - {x: 20, y: -20}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_13
       rect:
         serializedVersion: 2
@@ -205,9 +278,14 @@ TextureImporter:
         y: 239
         width: 67
         height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.29850745, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -20}
+        - {x: 47, y: -20}
+        - {x: 47, y: 20}
     - name: CLIFFVEG_14
       rect:
         serializedVersion: 2
@@ -215,9 +293,17 @@ TextureImporter:
         y: 80
         width: 71
         height: 119
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.7183099, y: 0.8319328}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -40, y: 20}
+        - {x: -48, y: 13}
+        - {x: -51, y: 6}
+        - {x: -51, y: -82}
+        - {x: -28, y: -99}
+        - {x: 20, y: -99}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_15
       rect:
         serializedVersion: 2
@@ -225,9 +311,15 @@ TextureImporter:
         y: 80
         width: 40
         height: 119
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8319328}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -99}
+        - {x: 16, y: -99}
+        - {x: 20, y: -94}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_16
       rect:
         serializedVersion: 2
@@ -235,9 +327,15 @@ TextureImporter:
         y: 80
         width: 40
         height: 119
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8319328}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -99}
+        - {x: 16, y: -99}
+        - {x: 20, y: -94}
+        - {x: 20, y: 20}
     - name: CLIFFVEG_17
       rect:
         serializedVersion: 2
@@ -245,9 +343,24 @@ TextureImporter:
         y: 80
         width: 67
         height: 119
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: 0.29850745, y: 0.8319328}
       border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -20, y: 20}
+        - {x: -20, y: -99}
+        - {x: 28, y: -99}
+        - {x: 47, y: -79}
+        - {x: 47, y: 20}
+      - - {x: 34, y: -65}
+        - {x: 30, y: -67}
+        - {x: 30, y: -70}
+        - {x: 31, y: -73}
+        - {x: 35, y: -73}
+        - {x: 38, y: -72}
+        - {x: 38, y: -67}
+        - {x: 37, y: -65}
+    outline: []
   spritePackingTag: 
   userData: 
   assetBundleName: 
