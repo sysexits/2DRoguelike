@@ -1,0 +1,199 @@
+fileFormatVersion: 2
+guid: 9f5213bc78abf754abbd169b07417b08
+timeCreated: 1452411289
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: CLIFSHD_0
+    21300002: CLIFSHD_1
+    21300004: CLIFSHD_2
+    21300006: CLIFSHD_3
+    21300008: CLIFSHD_4
+    21300010: CLIFSHD_5
+    21300012: CLIFSHD_6
+    21300014: CLIFSHD_7
+    21300016: CLIFSHD_8
+    21300018: CLIFSHD_9
+    21300020: CLIFSHD_10
+    21300022: CLIFSHD_11
+    21300024: CLIFSHD_12
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: CLIFSHD_0
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 401
+        width: 24
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_1
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 399
+        width: 57
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_2
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 318
+        width: 20
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_3
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 240
+        width: 81
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_4
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 307
+        width: 17
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_5
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 242
+        width: 54
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_6
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 239
+        width: 50
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_7
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 239
+        width: 50
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_8
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 121
+        width: 80
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_9
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 121
+        width: 80
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_10
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 40
+        width: 113
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_11
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 41
+        width: 62
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFSHD_12
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 41
+        width: 40
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,375 @@
+fileFormatVersion: 2
+guid: 2f19d0d7b87449d4c93353d561d2d62f
+timeCreated: 1452411060
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: TREE_0
+    21300002: TREE_1
+    21300004: TREE_2
+    21300006: TREE_3
+    21300008: TREE_4
+    21300010: TREE_5
+    21300012: TREE_6
+    21300014: TREE_7
+    21300016: TREE_8
+    21300018: TREE_9
+    21300020: TREE_10
+    21300022: TREE_11
+    21300024: TREE_12
+    21300026: TREE_13
+    21300028: TREE_14
+    21300030: TREE_15
+    21300032: TREE_16
+    21300034: TREE_17
+    21300036: TREE_18
+    21300038: TREE_19
+    21300040: TREE_20
+    21300042: TREE_21
+    21300044: TREE_22
+    21300046: TREE_23
+    21300048: TREE_24
+    21300050: TREE_25
+    21300052: TREE_26
+    21300054: TREE_27
+    21300056: TREE_28
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: TREE_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 366
+        width: 110
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_1
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 367
+        width: 68
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_2
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 360
+        width: 71
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_3
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 383
+        width: 29
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_4
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 368
+        width: 40
+        height: 31
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_5
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 362
+        width: 89
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_6
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 207
+        width: 68
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_7
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 206
+        width: 110
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_8
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 248
+        width: 40
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_9
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 263
+        width: 29
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_10
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 201
+        width: 48
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_11
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 170
+        width: 42
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_12
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 89
+        width: 80
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_13
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 94
+        width: 106
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_14
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 99
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_15
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 99
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_16
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 99
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_17
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 99
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_18
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 99
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_19
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 79
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_20
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 79
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_21
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 79
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_22
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 80
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_23
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 80
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_24
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 29
+        width: 80
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_25
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 19
+        width: 70
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_26
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 59
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_27
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 59
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TREE_28
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 59
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

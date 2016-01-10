@@ -1,0 +1,254 @@
+fileFormatVersion: 2
+guid: a53927d925c79834ea97fb4d6ef89f3b
+timeCreated: 1452410372
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: CLIFFVEG_0
+    21300002: CLIFFVEG_1
+    21300004: CLIFFVEG_2
+    21300006: CLIFFVEG_3
+    21300008: CLIFFVEG_4
+    21300010: CLIFFVEG_5
+    21300012: CLIFFVEG_6
+    21300014: CLIFFVEG_7
+    21300016: CLIFFVEG_8
+    21300018: CLIFFVEG_9
+    21300020: CLIFFVEG_10
+    21300022: CLIFFVEG_11
+    21300024: CLIFFVEG_12
+    21300026: CLIFFVEG_13
+    21300028: CLIFFVEG_14
+    21300030: CLIFFVEG_15
+    21300032: CLIFFVEG_16
+    21300034: CLIFFVEG_17
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: CLIFFVEG_0
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 399
+        width: 55
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_1
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 399
+        width: 40
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_2
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 399
+        width: 40
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_3
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 399
+        width: 64
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_4
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 399
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_5
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 399
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_6
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 319
+        width: 63
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_7
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 319
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_8
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 319
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_9
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 319
+        width: 67
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_10
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 239
+        width: 63
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_11
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 239
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_12
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 239
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_13
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 239
+        width: 67
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_14
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 80
+        width: 71
+        height: 119
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_15
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 80
+        width: 40
+        height: 119
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_16
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 80
+        width: 40
+        height: 119
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CLIFFVEG_17
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 80
+        width: 67
+        height: 119
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
