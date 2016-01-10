@@ -21,6 +21,9 @@ namespace Roguelike
         // N1, N2, NE1, NE2, E1, E2, ..., NW1, NW2
         public GameObject[] cliffTiles;
 
+        // Prefab of an obstacle
+        public GameObject blockTiles;
+
         private Transform boardHolder; // A variable to store a reference to the transform of our Board object.
 
         // for debug!
@@ -28,9 +31,13 @@ namespace Roguelike
 
         private void instantiateAndAdd(GameObject objToClone, int posX, int posY, Transform objParent)
         {
+            instantiateAndAdd(objToClone, posX, posY, 0, objParent);
+        }
+        private void instantiateAndAdd(GameObject objToClone, int posX, int posY, int posZ, Transform objParent)
+        {
             GameObject tile = Instantiate(
                 objToClone,
-                new Vector3(posX * SQUARESIZE_PER_UNIT, posY * SQUARESIZE_PER_UNIT, 0),
+                new Vector3(posX * SQUARESIZE_PER_UNIT, posY * SQUARESIZE_PER_UNIT, posZ * SQUARESIZE_PER_UNIT),
                 Quaternion.identity
             ) as GameObject;
             tile.transform.SetParent(objParent);
@@ -176,7 +183,6 @@ namespace Roguelike
             }
 
             // cliff, west side
-            westGate = 7;
             for (int y = 1; y <= rows - 1; y++)
             {
                 if (y == westGate + 3)
@@ -197,7 +203,6 @@ namespace Roguelike
             }
 
             // cliff, east side
-            eastGate = 7;
             for (int y = 1; y <= rows - 1; y++)
             {
                 if (y == eastGate + 3)
@@ -225,6 +230,20 @@ namespace Roguelike
                     Mathf.FloorToInt(pos.y),
                     cliffHolder
                 );
+            }
+
+            // block generation
+            Transform blockHolder = new GameObject("Blocks").transform;
+            blockHolder.SetParent(boardHolder);
+            for (int y=rows-1; y>=0; y--)
+            {
+                for (int x=0; x<columns; x++)
+                {
+                    if (arrayMap[x + (rows - 1 - y) * columns] == "b")
+                    {
+                        instantiateAndAdd(blockTiles, x, y, y, blockHolder);
+                    }
+                }
             }
         }
 
