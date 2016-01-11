@@ -21,6 +21,8 @@ namespace Roguelike
         // N1, N2, NE1, NE2, E1, E2, ..., NW1, NW2
         public GameObject[] cliffTiles;
 
+        public GameObject potionTiles;
+
         // Prefab of an obstacle
         public GameObject blockTiles;
         
@@ -30,6 +32,7 @@ namespace Roguelike
         private Transform borderColliderHolder = null;
         private Transform playerHolder = null;
         private Transform blockHolder = null;
+        private Transform potionHolder = null;
 
         private Player player = null;
 
@@ -331,6 +334,9 @@ namespace Roguelike
                     if (arrayMap[x + (rows - 1 - y) * columns] == "b")
                     {
                         instantiateAndAdd(blockTiles, x, y, 0, blockHolder);
+                    } else if (arrayMap[x + (rows - 1 - y) * columns] == "p")
+                    {
+                        instantiateAndAdd(potionTiles, x, y, 0, potionHolder);
                     }
                 }
             }
@@ -442,6 +448,11 @@ namespace Roguelike
                 playerHolder = new GameObject("Player").transform;
                 playerHolder.SetParent(boardHolder);
             }
+            if (potionHolder == null)
+            {
+                potionHolder = new GameObject("Potion").transform;
+                potionHolder.SetParent(boardHolder);
+            }
         }
 
         void BoardHolderClear()
@@ -470,6 +481,14 @@ namespace Roguelike
             }
             Destroy(borderColliderHolder);
             borderColliderHolder = null;
+            lstChildren = potionHolder.GetComponentsInChildren<Transform>();
+            if (lstChildren != null)
+            {
+                foreach (Transform t in lstChildren)
+                    Destroy(t.gameObject);
+            }
+            Destroy(potionHolder);
+            potionHolder = null;
             lstChildren = blockHolder.GetComponentsInChildren<Transform>();
             if (lstChildren != null)
             {
