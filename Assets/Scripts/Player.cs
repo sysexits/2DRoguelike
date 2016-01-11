@@ -7,6 +7,11 @@ namespace Roguelike
     public class Player : MonoBehaviour
     {
         public bool canMove = false;
+        private int count = 0;
+        private int dirX = 0;
+        private int dirY = 1;
+
+        private Animator anim;
 
         // sprites for moving: N E S W
         public enum Direction
@@ -14,6 +19,7 @@ namespace Roguelike
             NORTH, EAST, SOUTH, WEST
         };
         public Sprite[] moveSprite;
+        public Animation[] animations;
 
         // the layer where the collision detection is checked
         public LayerMask objectLayer;
@@ -25,34 +31,49 @@ namespace Roguelike
         private int m_posX;
         private int m_posY;
 
+        void Start()
+        {
+            anim = (Animator)GetComponent<Animator>();
+        }
+
         // Update is called once per frame
         void Update()
         {
             int horizontal = 0;
             int vertical = 0;
 
-            /*            if (Input.GetKeyUp(KeyCode.W))
-                        {
-                            vertical = 1;
-                        }
-                        else if (Input.GetKeyUp(KeyCode.S))
-                        {
-                            vertical = -1;
-                        }
-                        else if (Input.GetKeyUp(KeyCode.D))
-                        {
-                            horizontal = 1;
-                        }
-                        else if (Input.GetKeyUp(KeyCode.A))
-                        {
-                            horizontal = -1;
-                        }*/
-
             // if moving horizontally, do not move vertically
             if (Time.frameCount % 20 == 0)
             {
                 canMove = true;
             }
+            
+            if (Mathf.Abs(CnInputManager.GetAxis("Horizontal")) > 0 || Mathf.Abs(CnInputManager.GetAxis("Vertical")) > 0)
+            {
+                count += 1;
+                if(count > 60)
+                {
+                    count = 1;
+                }
+            } else
+            {
+                count = 0;
+
+                if(dirX == -1)
+                {
+                    GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.WEST)];
+                } else if(dirX == 1)
+                {
+                    GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.EAST)];
+                } else if(dirY == -1)
+                {
+                    GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.NORTH)];
+                } else if(dirY == 1)
+                {
+                    GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.SOUTH)];
+                }
+            }
+            
             if (canMove)
             {
                 canMove = false;
@@ -81,32 +102,45 @@ namespace Roguelike
                 }
             }
 
-/*            if (horizontal != 0)
-            {
-                vertical = 0;
-            }*/
-
             RaycastHit2D hit;
             if (TryToMove(horizontal, vertical, out hit))
             {
                 transform.Translate(horizontal, vertical, 0f);
             }
+            
+            // count 2++ => run
 
             if (horizontal > 0)
             {
-                GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.EAST)];
+                if (count < 2)
+                    GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.EAST)];
+                else
+                    anim.Play(Animator.StringToHash("Base Layer.LinkMoveR"));
+                dirX = 1; dirY = 0;
             }
             else if (horizontal < 0)
             {
-                GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.WEST)];
+                if (count < 2)
+                    GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.WEST)];
+                else
+                    anim.Play(Animator.StringToHash("Base Layer.LinkMoveL"));
+                dirX = -1; dirY = 0;
             }
             else if (vertical > 0)
             {
-                GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.NORTH)];
+                if (count < 2)
+                    GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.NORTH)];
+                else
+                    anim.Play(Animator.StringToHash("Base Layer.LinkMoveU"));
+                dirX = 0; dirY = -1;
             }
             else if (vertical < 0)
             {
-                GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.SOUTH)];
+                if (count < 2)
+                    GetComponent<SpriteRenderer>().sprite = moveSprite[(int)(Direction.SOUTH)];
+                else
+                    anim.Play(Animator.StringToHash("Base Layer.LinkMoveD"));
+                dirX = 0; dirY = 1;
             }
         }
 
