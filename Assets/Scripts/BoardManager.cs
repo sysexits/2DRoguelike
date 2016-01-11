@@ -241,7 +241,7 @@ namespace Roguelike
                 {
                     if (arrayMap[x + (rows - 1 - y) * columns] == "b")
                     {
-                        instantiateAndAdd(blockTiles, x, y, y, blockHolder);
+                        instantiateAndAdd(blockTiles, x, y, 0, blockHolder);
                     }
                 }
             }
@@ -250,15 +250,7 @@ namespace Roguelike
         void BoardSetup()
         {
             boardHolder = new GameObject("Board").transform;
-            generateMap(theMapString);
 
-            boardHolder.Translate(new Vector3(
-                (-rows/2.0f + 0.5f) * SQUARESIZE_PER_UNIT, 
-                (-columns/2.0f + 0.5f) * SQUARESIZE_PER_UNIT,
-                0
-            ));
-
-            /*
             Hashtable data = new Hashtable();
             data.Add("username", SystemInfo.deviceUniqueIdentifier);
 
@@ -276,10 +268,18 @@ namespace Roguelike
                     // Receive String from server and generate room
                     Hashtable hashmap = (Hashtable)JSON.JsonDecode(request.response.Text);
                     string mapString = (string) hashmap["map"];
-                    Debug.Log(mapString);
+                    generateMap(mapString);
+                    int rows = (int)hashmap["row"];
+                    int columns = (int)hashmap["column"];
+
+                    boardHolder.Translate(new Vector3(
+                        (-rows / 2.0f + 0.5f) * SQUARESIZE_PER_UNIT,
+                        (-columns / 2.0f + 0.5f) * SQUARESIZE_PER_UNIT,
+                        0
+                    ));
                 }
             });
-            */
+            
         }
 
         // Use this for initialization
