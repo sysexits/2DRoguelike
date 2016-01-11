@@ -13,7 +13,7 @@ namespace Roguelike
 
         // Prefabs of floors
         public GameObject[] floorTiles;
-
+        
         // Prefabs of rock floors
         public GameObject[] rockFloorTiles;
 
@@ -23,6 +23,7 @@ namespace Roguelike
 
         // Prefab of an obstacle
         public GameObject blockTiles;
+        public GameObject playerTiles;
 
         private Transform boardHolder; // A variable to store a reference to the transform of our Board object.
 
@@ -235,6 +236,10 @@ namespace Roguelike
             // block generation
             Transform blockHolder = new GameObject("Blocks").transform;
             blockHolder.SetParent(boardHolder);
+
+            Transform playerHolder = new GameObject("Player").transform;
+            playerHolder.SetParent(boardHolder);
+
             for (int y=rows-1; y>=0; y--)
             {
                 for (int x=0; x<columns; x++)
@@ -242,6 +247,9 @@ namespace Roguelike
                     if (arrayMap[x + (rows - 1 - y) * columns] == "b")
                     {
                         instantiateAndAdd(blockTiles, x, y, 0, blockHolder);
+                    } else if(arrayMap[x + (rows -1 - y) * columns] == "u")
+                    {
+                        instantiateAndAdd(playerTiles, x, y, 0, playerHolder);
                     }
                 }
             }
@@ -268,6 +276,7 @@ namespace Roguelike
                     // Receive String from server and generate room
                     Hashtable hashmap = (Hashtable)JSON.JsonDecode(request.response.Text);
                     string mapString = (string) hashmap["map"];
+                    
                     generateMap(mapString);
                     int rows = (int)hashmap["row"];
                     int columns = (int)hashmap["column"];
