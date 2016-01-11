@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using CnControls;
 
 namespace Roguelike
 {
     public class Player : MonoBehaviour
     {
+        public bool canMove = false;
+
         // sprites for moving: N E S W
         public enum Direction
         {
@@ -45,7 +48,38 @@ namespace Roguelike
                 vertical = 0;
             }
 
-            transform.Translate(horizontal, vertical, 0);
+            if (Time.frameCount % 20 == 0)
+            {
+                canMove = true;
+            }
+            if(canMove)
+            {
+                canMove = false;
+                var movementVector = new Vector3(CnInputManager.GetAxis("Horizontal"), CnInputManager.GetAxis("Vertical"), 0f);
+                if (movementVector.sqrMagnitude >= 0.00001f)
+                {
+                    movementVector.Normalize();
+                    double rad = Mathf.Atan2(movementVector.y, movementVector.x);
+                    double degree = rad * Mathf.Rad2Deg;
+                    if (degree >= 45 && degree <= 135)
+                    {
+                        vertical = 1;
+                    }
+                    else if (degree > 135 || degree < -135)
+                    {
+                        horizontal = -1;
+                    }
+                    else if (degree <= -45 && degree >= -135)
+                    {
+                        vertical = -1;
+                    }
+                    else if (degree < 45 || degree < -45)
+                    {
+                        horizontal = 1;
+                    }
+                }
+            }
+            transform.Translate(horizontal, vertical, 0f);
 
             if (horizontal > 0)
             {
