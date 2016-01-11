@@ -62,7 +62,7 @@ namespace Roguelike
             }
             for (int i = 0; i < rows; i++)
             {
-                if (arrayMap[columns - 1 + columns * i] == "E")
+                if (arrayMap[columns - 1 + columns * (rows - 1 - i)] == "E")
                 {
                     eastGate = i;
                     break;
@@ -70,7 +70,7 @@ namespace Roguelike
             }
             for (int i = 0; i < rows; i++)
             {
-                if (arrayMap[columns * i] == "W")
+                if (arrayMap[columns * (rows - 1 - i)] == "W")
                 {
                     westGate = i;
                     break;
@@ -83,7 +83,7 @@ namespace Roguelike
 
             for (int x = -2; x < columns + 2; x++)
             {
-                for (int y = -2; y <= rows + 2; y++)
+                for (int y = -3; y < rows + 3; y++)
                 {
                     int tileIndex = 0;
                     if (x<=0 || y<=0 || x>=columns-1 || y>=rows-1)
@@ -114,33 +114,40 @@ namespace Roguelike
             }
 
             // cliff generation
+            List<Vector3> rockTilePositions = new List<Vector3>();
             List<Vector3> rockPositions = new List<Vector3>();
             Transform cliffHolder = new GameObject("Cliffs").transform;
             cliffHolder.SetParent(boardHolder);
 
             // cliff, SW side of the map
             instantiateAndAdd(cliffTiles[3], -1, -1, cliffHolder);
-            for (int x = -2; x <= 0; x++)
-                rockPositions.Add(new Vector3(x, -2, 0));
+            for (int y = -3; y <= -2; y++)
+                for (int x = -2; x <= 0; x++)
+                    rockTilePositions.Add(new Vector3(x, y, 0));
             for (int y = -1; y <= 0; y++)
-                rockPositions.Add(new Vector3(-2, y, 0));
+                rockTilePositions.Add(new Vector3(-2, y, 0));
 
             // cliff, SE side of the map
             instantiateAndAdd(cliffTiles[15], columns, -1, cliffHolder);
-            for (int x = columns-1; x<=columns+1; x++)
-                rockPositions.Add(new Vector3(x, -2, 0));
+            for (int y = -3; y <= -2; y++)
+                for (int x = columns-1; x<=columns+1; x++)
+                    rockTilePositions.Add(new Vector3(x, y, 0));
             for (int y = -1; y <= 0; y++)
-                rockPositions.Add(new Vector3((columns + 1), y, 0));
+                rockTilePositions.Add(new Vector3((columns + 1), y, 0));
 
             // cliff, NW side of the map
-            instantiateAndAdd(cliffTiles[7], -1, rows + 2, cliffHolder);
-            for (int y = rows; y <= rows + 2; y++)
-                rockPositions.Add(new Vector3(-2, y, 0));
+            instantiateAndAdd(cliffTiles[7], -1, rows + 1, cliffHolder);
+            for (int x = -2; x <= 0; x++)
+                rockTilePositions.Add(new Vector3(x, rows + 2, 0));
+            for (int y = rows-1; y <= rows + 1; y++)
+                rockTilePositions.Add(new Vector3(-2, y, 0));
 
             // cliff, NE side of the map
-            instantiateAndAdd(cliffTiles[11], columns, rows + 2, cliffHolder);
-            for (int y = rows; y <= rows + 2; y++)
-                rockPositions.Add(new Vector3((columns + 1), y, 0));
+            instantiateAndAdd(cliffTiles[11], columns, rows + 1, cliffHolder);
+            for (int x = columns - 1; x <= columns + 1; x++)
+                rockTilePositions.Add(new Vector3(x, rows + 2, 0));
+            for (int y = rows-1; y <= rows + 1; y++)
+                rockTilePositions.Add(new Vector3((columns + 1), y, 0));
 
             // cliff, south side
             for (int x = 1; x < columns - 1; x++)
@@ -148,17 +155,20 @@ namespace Roguelike
                 if (x == southGate - 2)
                 {
                     instantiateAndAdd(cliffTiles[2], x, -1, cliffHolder);
-                    instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], x, -2, cliffHolder);
+                    for (int y = -3; y <= -2; y++)
+                        instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], x, y, cliffHolder);
                 }
                 else if (x == southGate + 2)
                 {
                     instantiateAndAdd(cliffTiles[14], x, -1, cliffHolder);
-                    instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], x, -2, cliffHolder);
+                    for (int y = -3; y <= -2; y++)
+                        instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], x, y, cliffHolder);
                 }
                 else if (Mathf.Abs(x - southGate) >= 3)
                 {
                     instantiateAndAdd(cliffTiles[Random.Range(0, 2)], x, -1, cliffHolder);
-                    rockPositions.Add(new Vector3(x, -2, 0));
+                    for (int y = -3; y <= -2; y++)
+                        rockTilePositions.Add(new Vector3(x, y, 0));
                 }
             }
 
@@ -167,15 +177,18 @@ namespace Roguelike
             {
                 if (x == northGate - 2)
                 {
-                    instantiateAndAdd(cliffTiles[6], x, rows + 2, cliffHolder);
+                    instantiateAndAdd(cliffTiles[6], x, rows + 1, cliffHolder);
+                    instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], x, rows + 2, cliffHolder);
                 }
                 else if (x == northGate + 2)
                 {
-                    instantiateAndAdd(cliffTiles[10], x, rows + 2, cliffHolder);
+                    instantiateAndAdd(cliffTiles[10], x, rows + 1, cliffHolder);
+                    instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], x, rows + 2, cliffHolder);
                 }
                 else if (Mathf.Abs(x - northGate) >= 3)
                 {
-                    instantiateAndAdd(cliffTiles[8 + Random.Range(0, 2)], x, rows + 2, cliffHolder);
+                    instantiateAndAdd(cliffTiles[8 + Random.Range(0, 2)], x, rows + 1, cliffHolder);
+                    rockTilePositions.Add(new Vector3(x, rows + 2, 0));
                 }
             }
 
@@ -195,7 +208,7 @@ namespace Roguelike
                 else if (Mathf.Abs(y - (westGate + 1)) >= 3)
                 {
                     instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], -1, y, cliffHolder);
-                    rockPositions.Add(new Vector3(-2, y, 0));
+                    rockTilePositions.Add(new Vector3(-2, y, 0));
                 }
             }
 
@@ -215,12 +228,12 @@ namespace Roguelike
                 else if (Mathf.Abs(y - (eastGate + 1)) >= 3)
                 {
                     instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], columns, y, cliffHolder);
-                    rockPositions.Add(new Vector3(columns + 1, y, 0));
+                    rockTilePositions.Add(new Vector3(columns + 1, y, 0));
                 }
             }
 
             // random generation of rock tiles
-            foreach (Vector3 pos in rockPositions)
+            foreach (Vector3 pos in rockTilePositions)
             {
                 instantiateAndAdd(
                     rockFloorTiles[Random.Range(0, rockFloorTiles.Length)],
@@ -230,13 +243,13 @@ namespace Roguelike
                 );
             }
 
-            // box colliders for the borders (in the order of north/south/west/east)
+            // box colliders for the borders
             Transform borderColliderHolder = new GameObject("BorderColliders").transform;
             borderColliderHolder.SetParent(boardHolder);
 
-            for (int x=0; x< columns; x++)
+            for (int x = 0; x < columns; x++)
             {
-                for (int y=0; y< rows; y++)
+                for (int y = 0; y < rows; y++)
                 {
                     if (arrayMap[x + (rows - 1 - y) * columns] == "#")
                     {
@@ -247,6 +260,58 @@ namespace Roguelike
 
                         border.gameObject.AddComponent<BoxCollider2D>();
                     }
+                }
+            }
+            if (northGate >= 1 && northGate < columns - 1)
+            {
+                for (int x = northGate-1; x <= northGate+1; x += 2)
+                {
+                    Transform border = new GameObject("collider").transform;
+                    border.SetParent(borderColliderHolder);
+                    border.Translate(x, rows + 1f, 0);
+                    border.localScale += new Vector3(0, 2.0f, 0);
+                    border.gameObject.layer = LayerMask.NameToLayer("Object");
+
+                    border.gameObject.AddComponent<BoxCollider2D>();
+                }
+            }
+            if (southGate >= 1 && southGate < columns - 1)
+            {
+                for (int x = southGate - 1; x <= southGate + 1; x += 2)
+                {
+                    Transform border = new GameObject("collider").transform;
+                    border.SetParent(borderColliderHolder);
+                    border.Translate(x, -2f, 0);
+                    border.localScale += new Vector3(0, 2.0f, 0);
+                    border.gameObject.layer = LayerMask.NameToLayer("Object");
+
+                    border.gameObject.AddComponent<BoxCollider2D>();
+                }
+            }
+            if (eastGate >= 1 && eastGate < rows - 1)
+            {
+                for (int y = eastGate - 1; y <= eastGate + 1; y += 2)
+                {
+                    Transform border = new GameObject("collider").transform;
+                    border.SetParent(borderColliderHolder);
+                    border.Translate(columns + 0.5f, y, 0);
+                    border.localScale += new Vector3(1.0f, 0, 0);
+                    border.gameObject.layer = LayerMask.NameToLayer("Object");
+
+                    border.gameObject.AddComponent<BoxCollider2D>();
+                }
+            }
+            if (westGate >= 1 && westGate < rows - 1)
+            {
+                for (int y = westGate - 1; y <= westGate + 1; y += 2)
+                {
+                    Transform border = new GameObject("collider").transform;
+                    border.SetParent(borderColliderHolder);
+                    border.Translate(-1.5f, y, 0);
+                    border.localScale += new Vector3(1.0f, 0, 0);
+                    border.gameObject.layer = LayerMask.NameToLayer("Object");
+
+                    border.gameObject.AddComponent<BoxCollider2D>();
                 }
             }
 
