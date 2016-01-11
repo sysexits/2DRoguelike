@@ -9,7 +9,7 @@ namespace Roguelike
         public int rows = 16;
         public int columns = 16;
 
-        public float SQUARESIZE_PER_UNIT = 0.4f;
+        public static float SQUARESIZE_PER_UNIT = 0.4f;
 
         // Prefabs of floors
         public GameObject[] floorTiles;
@@ -23,7 +23,6 @@ namespace Roguelike
 
         // Prefab of an obstacle
         public GameObject blockTiles;
-        public GameObject playerTiles;
 
         private Transform boardHolder; // A variable to store a reference to the transform of our Board object.
 
@@ -38,7 +37,7 @@ namespace Roguelike
         {
             GameObject tile = Instantiate(
                 objToClone,
-                new Vector3(posX * SQUARESIZE_PER_UNIT, posY * SQUARESIZE_PER_UNIT, posZ * SQUARESIZE_PER_UNIT),
+                new Vector3(posX, posY, posZ),
                 Quaternion.identity
             ) as GameObject;
             tile.transform.SetParent(objParent);
@@ -233,7 +232,7 @@ namespace Roguelike
                 );
             }
 
-            // block generation
+            // block and player generation
             Transform blockHolder = new GameObject("Blocks").transform;
             blockHolder.SetParent(boardHolder);
 
@@ -249,7 +248,8 @@ namespace Roguelike
                         instantiateAndAdd(blockTiles, x, y, 0, blockHolder);
                     } else if(arrayMap[x + (rows -1 - y) * columns] == "u")
                     {
-                        instantiateAndAdd(playerTiles, x, y, 0, playerHolder);
+                        Player player = ObjectFactory.createPlayer(x, y);
+                        player.transform.SetParent(playerHolder);
                     }
                 }
             }
@@ -258,6 +258,9 @@ namespace Roguelike
         void BoardSetup()
         {
             boardHolder = new GameObject("Board").transform;
+            boardHolder.localScale += new Vector3(1.0f / SQUARESIZE_PER_UNIT - 1.0f,
+                1.0f / SQUARESIZE_PER_UNIT - 1.0f,
+                0.0f);
 
             Hashtable data = new Hashtable();
             data.Add("username", SystemInfo.deviceUniqueIdentifier);
