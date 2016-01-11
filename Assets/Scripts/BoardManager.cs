@@ -23,8 +23,19 @@ namespace Roguelike
 
         // Prefab of an obstacle
         public GameObject blockTiles;
+        
+        private Transform boardHolder = null;
+        private Transform floorHolder = null;
+        private Transform cliffHolder = null;
+        private Transform borderColliderHolder = null;
+        private Transform playerHolder = null;
+        private Transform blockHolder = null;
 
-        private Transform boardHolder; // A variable to store a reference to the transform of our Board object.
+        private Player player = null;
+
+        private string currentStageHash = null;
+
+        private PlayerSpawnDir nextSpawnDir;
 
         private void instantiateAndAdd(GameObject objToClone, int posX, int posY, Transform objParent)
         {
@@ -40,7 +51,12 @@ namespace Roguelike
             tile.transform.SetParent(objParent);
         }
 
-        void generateMap(string mapString)
+        private enum PlayerSpawnDir
+        {
+            SPAWN_EAST, SPAWN_NORTH, SPAWN_WEST, SPAWN_SOUTH, SPAWN_NONE
+        }
+
+        void generateMapAndPlayer(string mapString, int HPStatus, PlayerSpawnDir spawnDir)
         {
             string[] arrayMap = mapString.Split(',');
             int northGate = -111, southGate = -111, eastGate = -111, westGate = -111;
@@ -78,9 +94,6 @@ namespace Roguelike
             }
 
             // floor generation
-            Transform floorHolder = new GameObject("Floors").transform;
-            floorHolder.SetParent(boardHolder);
-
             for (int x = -2; x < columns + 2; x++)
             {
                 for (int y = -3; y < rows + 3; y++)
@@ -116,8 +129,6 @@ namespace Roguelike
             // cliff generation
             List<Vector3> rockTilePositions = new List<Vector3>();
             List<Vector3> rockPositions = new List<Vector3>();
-            Transform cliffHolder = new GameObject("Cliffs").transform;
-            cliffHolder.SetParent(boardHolder);
 
             // cliff, SW side of the map
             instantiateAndAdd(cliffTiles[3], -1, -1, cliffHolder);
@@ -244,9 +255,6 @@ namespace Roguelike
             }
 
             // box colliders for the borders
-            Transform borderColliderHolder = new GameObject("BorderColliders").transform;
-            borderColliderHolder.SetParent(boardHolder);
-
             for (int x = 0; x < columns; x++)
             {
                 for (int y = 0; y < rows; y++)
@@ -315,43 +323,183 @@ namespace Roguelike
                 }
             }
 
-            // block and player generation
-            Transform blockHolder = new GameObject("Blocks").transform;
-            blockHolder.SetParent(boardHolder);
-
-            Transform playerHolder = new GameObject("Player").transform;
-            playerHolder.SetParent(boardHolder);
-
-            for (int y=rows-1; y>=0; y--)
+            // block generation
+            for (int y = rows - 1; y >= 0; y--)
             {
-                for (int x=0; x<columns; x++)
+                for (int x = 0; x < columns; x++)
                 {
                     if (arrayMap[x + (rows - 1 - y) * columns] == "b")
                     {
                         instantiateAndAdd(blockTiles, x, y, 0, blockHolder);
-                    } else if(arrayMap[x + (rows -1 - y) * columns] == "u")
-                    {
-                        Player player = ObjectFactory.createPlayer(x, y);
-                        player.transform.SetParent(playerHolder);
                     }
                 }
             }
+
+            // player generation
+            int playerX = 0;
+            int playerY = 0;
+            switch (spawnDir)
+            {
+                case PlayerSpawnDir.SPAWN_EAST:
+                    playerX = columns - 2;
+                    playerY = eastGate;
+                    break;
+                case PlayerSpawnDir.SPAWN_NORTH:
+                    playerX = northGate;
+                    playerY = rows - 2;
+                    break;
+                case PlayerSpawnDir.SPAWN_WEST:
+                    playerX = 1;
+                    playerY = westGate;
+                    break;
+                case PlayerSpawnDir.SPAWN_SOUTH:
+                    playerX = southGate;
+                    playerY = 1;
+                    break;
+                case PlayerSpawnDir.SPAWN_NONE:
+                    bool playerPlaced = false;
+                    bool hasEmptySpace = false;
+                    for (int y = rows - 1; y >= 0; y--)
+                    {
+                        for (int x = 0; x < columns; x++)
+                        {
+                            if (arrayMap[x + (rows - 1 - y) * columns] == "u")
+                            {
+                                if (!playerPlaced)
+                                {
+                                    playerPlaced = true;
+                                    playerX = x;
+                                    playerY = y;
+                                }
+                            }
+                            else if (arrayMap[x + (rows - 1 - y) * columns] == "f")
+                            {
+                                hasEmptySpace = true;
+                            }
+                        }
+                    }
+                    while (!playerPlaced && hasEmptySpace)
+                    {
+                        playerX = Random.Range(1, columns - 1);
+                        playerY = Random.Range(1, columns - 1);
+                        if (arrayMap[playerX + (rows - 1 - playerY) * columns] == "f")
+                        {
+                            playerPlaced = true;
+                        }
+                    }
+                    break;
+            }
+            if (player == null)
+            {
+                player = ObjectFactory.createPlayer(playerX, playerY, HPStatus);
+                player.transform.SetParent(playerHolder);
+            }
+            else
+            {
+                player.Initialize(playerX, playerY, HPStatus);
+            }
+
+            Debug.Log("player: (" + playerX + "," + playerY + ")");
+            Debug.Log("NEWS gate:" + northGate + "," + eastGate + "," + westGate + "," + southGate);
+        }
+
+        void BoardHolderInit()
+        {
+            if (boardHolder == null)
+            {
+                boardHolder = new GameObject("Board").transform;
+                boardHolder.localScale += new Vector3(1.0f / SQUARESIZE_PER_UNIT - 1.0f,
+                    1.0f / SQUARESIZE_PER_UNIT - 1.0f,
+                    0.0f);
+                boardHolder.Translate(new Vector3(
+                    (-rows / 2.0f + 0.5f) * SQUARESIZE_PER_UNIT,
+                    (-columns / 2.0f + 0.5f) * SQUARESIZE_PER_UNIT,
+                    0
+                ));
+            }
+            if (floorHolder == null)
+            {
+                floorHolder = new GameObject("Floors").transform;
+                floorHolder.SetParent(boardHolder);
+            }
+            if (cliffHolder == null)
+            {
+                cliffHolder = new GameObject("Cliffs").transform;
+                cliffHolder.SetParent(boardHolder);
+            }
+            if (borderColliderHolder == null)
+            {
+                borderColliderHolder = new GameObject("BorderColliders").transform;
+                borderColliderHolder.SetParent(boardHolder);
+            }
+            if (blockHolder == null)
+            {
+                blockHolder = new GameObject("Blocks").transform;
+                blockHolder.SetParent(boardHolder);
+            }
+            if (playerHolder == null)
+            {
+                playerHolder = new GameObject("Player").transform;
+                playerHolder.SetParent(boardHolder);
+            }
+        }
+
+        void BoardHolderClear()
+        {
+            Transform[] lstChildren = floorHolder.GetComponentsInChildren<Transform>();
+            if (lstChildren != null)
+            {
+                foreach (Transform t in lstChildren)
+                    Destroy(t.gameObject);
+            }
+            Destroy(floorHolder);
+            floorHolder = null;
+            lstChildren = cliffHolder.GetComponentsInChildren<Transform>();
+            if (lstChildren != null)
+            {
+                foreach (Transform t in lstChildren)
+                    Destroy(t.gameObject);
+            }
+            Destroy(cliffHolder);
+            cliffHolder = null;
+            lstChildren = borderColliderHolder.GetComponentsInChildren<Transform>();
+            if (lstChildren != null)
+            {
+                foreach (Transform t in lstChildren)
+                    Destroy(t.gameObject);
+            }
+            Destroy(borderColliderHolder);
+            borderColliderHolder = null;
+            lstChildren = blockHolder.GetComponentsInChildren<Transform>();
+            if (lstChildren != null)
+            {
+                foreach (Transform t in lstChildren)
+                    Destroy(t.gameObject);
+            }
+            Destroy(blockHolder);
+            blockHolder = null;
         }
 
         void BoardSetup()
         {
-            boardHolder = new GameObject("Board").transform;
-            boardHolder.localScale += new Vector3(1.0f / SQUARESIZE_PER_UNIT - 1.0f,
-                1.0f / SQUARESIZE_PER_UNIT - 1.0f,
-                0.0f);
-
             Hashtable data = new Hashtable();
             data.Add("username", SystemInfo.deviceUniqueIdentifier);
+
+            Debug.Log("Send:");
+            foreach (string str in data.Keys)
+            {
+                Debug.Log(str + ": " + data[str]);
+            }
 
             HTTP.Request req = new HTTP.Request("post", "http://143.248.139.70:8000/login", data);
             req.Send((request) =>
             {
                 Hashtable result = request.response.Object;
+                Debug.Log("Result");
+                foreach (string str in result.Keys)
+                {
+                    Debug.Log(str + ": " + result[str]);
+                }
                 if (result == null)
                 {
                     Debug.LogWarning("Could not parse JSON response!");
@@ -362,31 +510,86 @@ namespace Roguelike
                     // Receive String from server and generate room
                     Hashtable hashmap = (Hashtable)JSON.JsonDecode(request.response.Text);
                     string mapString = (string) hashmap["map"];
-                    
-                    generateMap(mapString);
                     int rows = (int)hashmap["row"];
                     int columns = (int)hashmap["column"];
-
-                    boardHolder.Translate(new Vector3(
-                        (-rows / 2.0f + 0.5f) * SQUARESIZE_PER_UNIT,
-                        (-columns / 2.0f + 0.5f) * SQUARESIZE_PER_UNIT,
-                        0
-                    ));
+                    int hp = (int)hashmap["status"];
+                    currentStageHash = (string)hashmap["hash"];
+                    generateMapAndPlayer(mapString, hp, PlayerSpawnDir.SPAWN_NONE);
                 }
             });
-            
         }
 
         // Use this for initialization
         void Start()
         {
+            BoardHolderInit();
             BoardSetup();
         }
 
         // Update is called once per frame
         void Update()
         {
+        }
 
+        public void gotoNextStage(Player.Direction dir)
+        {
+            switch (dir)
+            {
+                case Player.Direction.EAST:
+                    nextSpawnDir = PlayerSpawnDir.SPAWN_WEST;
+                    break;
+                case Player.Direction.WEST:
+                    nextSpawnDir = PlayerSpawnDir.SPAWN_EAST;
+                    break;
+                case Player.Direction.SOUTH:
+                    nextSpawnDir = PlayerSpawnDir.SPAWN_NORTH;
+                    break;
+                case Player.Direction.NORTH:
+                    nextSpawnDir = PlayerSpawnDir.SPAWN_SOUTH;
+                    break;
+            }
+
+            Hashtable data = new Hashtable();
+            data.Add("entrance", ((int)dir).ToString());
+            data.Add("hash", currentStageHash);
+            data.Add("username", SystemInfo.deviceUniqueIdentifier);
+
+            Debug.Log("Send:");
+            foreach (string str in data.Keys)
+            {
+                Debug.Log(str + ": " + data[str]);
+            }
+
+            HTTP.Request req = new HTTP.Request("post", "http://143.248.139.70:8000/randomMapGenerator", data);
+            req.Send((request) =>
+            {
+                Hashtable result = request.response.Object;
+                Debug.Log("Result");
+                foreach (string str in result.Keys)
+                {
+                    Debug.Log(str + ": " + result[str]);
+                }
+                if (result == null)
+                {
+                    Debug.LogWarning("Could not parse JSON response!");
+                    return;
+                }
+                else
+                {
+                    // Receive String from server and generate room
+                    Hashtable hashmap = (Hashtable)JSON.JsonDecode(request.response.Text);
+                    string mapString = (string)hashmap["map"];
+                    int rows = (int)hashmap["row"];
+                    int columns = (int)hashmap["column"];
+                    int hp = (int)hashmap["status"];
+                    currentStageHash = (string)hashmap["hash"];
+
+                    BoardHolderClear();
+                    BoardHolderInit();
+                    Debug.Log("next spawn dir.:" + nextSpawnDir.ToString());
+                    generateMapAndPlayer(mapString, hp, nextSpawnDir);
+                }
+            });
         }
     }
 }

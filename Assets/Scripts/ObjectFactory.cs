@@ -17,7 +17,7 @@ namespace Roguelike
             instance = this;
         }
 
-        public static Player createPlayer(int posX, int posY)
+        public static Player createPlayer(int posX, int posY, int HPStatus)
         {
             GameObject playerObject = (Instantiate(
                 instance.playerPrefab,
@@ -25,7 +25,7 @@ namespace Roguelike
                 Quaternion.identity
             ) as GameObject);
             Player player = playerObject.GetComponent<Player>();
-            player.Initialize(posX, posY);
+            player.Initialize(posX, posY, HPStatus);
             return player;
         }
     }

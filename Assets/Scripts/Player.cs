@@ -13,10 +13,10 @@ namespace Roguelike
 
         private Animator anim;
 
-        // sprites for moving: N E S W
+        // sprites for moving: W S E N
         public enum Direction
         {
-            NORTH, EAST, SOUTH, WEST
+            WEST, SOUTH, EAST, NORTH
         };
         public Sprite[] moveSprite;
         public Animation[] animations;
@@ -30,6 +30,9 @@ namespace Roguelike
         // member variables for this player
         private int m_posX;
         private int m_posY;
+        private int m_HPStatus;
+
+        private BoardManager boardManager = null;
 
         void Start()
         {
@@ -106,8 +109,21 @@ namespace Roguelike
             if (TryToMove(horizontal, vertical, out hit))
             {
                 transform.Translate(horizontal, vertical, 0f);
+                m_posX += horizontal;
+                m_posY += vertical;
+                if (horizontal != 0 || vertical != 0)
+                {
+                    if (m_posX == 0)
+                        boardManager.gotoNextStage(Direction.WEST);
+                    else if (m_posX == boardManager.columns - 1)
+                        boardManager.gotoNextStage(Direction.EAST);
+                    else if (m_posY == boardManager.rows - 1)
+                        boardManager.gotoNextStage(Direction.NORTH);
+                    else if (m_posY == 0)
+                        boardManager.gotoNextStage(Direction.SOUTH);
+                }
             }
-            
+
             // count 2++ => run
 
             if (horizontal > 0)
@@ -144,6 +160,20 @@ namespace Roguelike
             }
         }
 
+        // initialization method
+        public void Initialize(int posX, int posY, int HPStatus)
+        {
+            m_posX = posX;
+            m_posY = posY;
+            m_HPStatus = HPStatus;
+            boxCollider = GetComponent<BoxCollider2D>();
+            if (boardManager == null)
+            {
+                boardManager = GameObject.Find("BoardManager").GetComponent<BoardManager>();
+            }
+            transform.position = new Vector3(posX, posY, 0);
+        }
+
         private bool TryToMove(int dirX, int dirY, out RaycastHit2D hit)
         {
             Vector2 start = transform.position;
@@ -165,14 +195,6 @@ namespace Roguelike
 
             // the casw when the line cast hit something
             return false;
-        }
-
-        // initialization method
-        public void Initialize(int posX, int posY)
-        {
-            m_posX = posX;
-            m_posY = posY;
-            boxCollider = GetComponent<BoxCollider2D>();
         }
     }
 }
