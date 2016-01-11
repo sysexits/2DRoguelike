@@ -283,7 +283,7 @@ namespace Roguelike
             Hashtable data = new Hashtable();
             data.Add("username", SystemInfo.deviceUniqueIdentifier);
 
-            HTTP.Request req = new HTTP.Request("post", "http://143.248.139.70:8000/randomMapGenerator", data);
+            HTTP.Request req = new HTTP.Request("post", "http://143.248.139.70:8000/login", data);
             req.Send((request) =>
             {
                 Hashtable result = request.response.Object;
