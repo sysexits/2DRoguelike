@@ -12,6 +12,12 @@ namespace Roguelike
         };
         public Sprite[] moveSprite;
 
+        // the layer where the collision detection is checked
+        public LayerMask objectLayer;
+
+        // the box collider 2d attached to this game object
+        private BoxCollider2D boxCollider;
+
         // member variables for this player
         private int m_posX;
         private int m_posY;
@@ -45,7 +51,11 @@ namespace Roguelike
                 vertical = 0;
             }
 
-            transform.Translate(horizontal, vertical, 0);
+            RaycastHit2D hit;
+            if (TryToMove(horizontal, vertical, out hit))
+            {
+                transform.Translate(horizontal, vertical, 0);
+            }
 
             if (horizontal > 0)
             {
@@ -65,11 +75,35 @@ namespace Roguelike
             }
         }
 
+        private bool TryToMove(int dirX, int dirY, out RaycastHit2D hit)
+        {
+            Vector2 start = transform.position;
+            Vector2 end = start + new Vector2(dirX, dirY);
+
+            // disable this object's box collider so that the ray cast does not hit this player
+            boxCollider.enabled = false;
+
+            hit = Physics2D.Linecast(start, end, objectLayer);
+
+            // re-enable the box collider
+            boxCollider.enabled = true;
+
+            // the case when the line cast did not hit anything
+            if (hit.transform == null)
+            {
+                return true;
+            }
+
+            // the casw when the line cast hit something
+            return false;
+        }
+
         // initialization method
         public void Initialize(int posX, int posY)
         {
             m_posX = posX;
             m_posY = posY;
+            boxCollider = GetComponent<BoxCollider2D>();
         }
     }
 }

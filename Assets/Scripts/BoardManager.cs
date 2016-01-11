@@ -26,9 +26,6 @@ namespace Roguelike
 
         private Transform boardHolder; // A variable to store a reference to the transform of our Board object.
 
-        // for debug!
-        public string theMapString;
-
         private void instantiateAndAdd(GameObject objToClone, int posX, int posY, Transform objParent)
         {
             instantiateAndAdd(objToClone, posX, posY, 0, objParent);
@@ -222,6 +219,7 @@ namespace Roguelike
                 }
             }
 
+            // random generation of rock tiles
             foreach (Vector3 pos in rockPositions)
             {
                 instantiateAndAdd(
@@ -230,6 +228,26 @@ namespace Roguelike
                     Mathf.FloorToInt(pos.y),
                     cliffHolder
                 );
+            }
+
+            // box colliders for the borders (in the order of north/south/west/east)
+            Transform borderColliderHolder = new GameObject("BorderColliders").transform;
+            borderColliderHolder.SetParent(boardHolder);
+
+            for (int x=0; x< columns; x++)
+            {
+                for (int y=0; y< rows; y++)
+                {
+                    if (arrayMap[x + (rows - 1 - y) * columns] == "#")
+                    {
+                        Transform border = new GameObject("collider").transform;
+                        border.SetParent(borderColliderHolder);
+                        border.Translate(x, y, 0);
+                        border.gameObject.layer = LayerMask.NameToLayer("Object");
+
+                        border.gameObject.AddComponent<BoxCollider2D>();
+                    }
+                }
             }
 
             // block and player generation
