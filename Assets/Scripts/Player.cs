@@ -31,8 +31,8 @@ namespace Roguelike
         private BoxCollider2D boxCollider;
 
         // member variables for this player
-        private int m_posX;
-        private int m_posY;
+        public int m_posX;
+        public int m_posY;
 
         public int m_HP
         {

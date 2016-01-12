@@ -694,6 +694,23 @@ namespace Roguelike
                         UDPClient peerClient = peer1.AddComponent<UDPClient>();
                         peerClient.InitiateSocket(data["ip"].ToString(), 12346);
                         peerUDPClients.Add(peer1);
+                        
+                        Hashtable data2 = new Hashtable();
+                        data2.Add("action", "myinfo2");
+                        data2.Add("hash", currentStageHash);
+                        data2.Add("username", SystemInfo.deviceUniqueIdentifier);
+                        data2.Add("ip", getMyIP());
+                        data2.Add("xpos", player.m_posX);
+                        data2.Add("ypos", player.m_posY);
+                        peerClient.sendJSONObject(data);
+
+                        break;
+                    case "myinfo2":
+                        generateEnemy(
+                            System.Int32.Parse(data["xpos"].ToString()),
+                            System.Int32.Parse(data["ypos"].ToString()),
+                            data["username"].ToString()
+                        );
                         break;
                     case "move":
                         foreach (PeerPlayer peer in peerPlayers)
