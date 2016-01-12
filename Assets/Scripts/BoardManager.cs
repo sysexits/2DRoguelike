@@ -26,17 +26,31 @@ namespace Roguelike
         // Prefab of an obstacle
         public GameObject blockTiles;
         
-        private Transform boardHolder = null;
-        private Transform floorHolder = null;
-        private Transform cliffHolder = null;
-        private Transform borderColliderHolder = null;
-        private Transform playerHolder = null;
-        private Transform blockHolder = null;
-        private Transform potionHolder = null;
+        public enum holderID
+        {
+            BOARD, FLOOR, CLIFF, BOARD_COLLIDER, PLAYER, BLOCK, POTION, WEAPON,
+            START = BOARD, END = WEAPON
+        }
+        public string[] holderNames =
+        {
+            "Board", "Floors", "Cliffs", "Colliders", "Player", "Blocks", "Potions", "Weapons"
+        };
+
+        // list of game objects which hold game objects for organization.
+        // in order to create a new holder in this code, add a new member into holderID and holderNames
+        private Transform[] holders = new Transform[(int)(holderID.END) + 1];
 
         private Player player = null;
 
+        // hash value of the current stage
         private string currentStageHash = null;
+
+        // enum of items
+        public enum itemID
+        {
+            POTION1, POTION2, WEAPON,
+            START = POTION1, END = WEAPON
+        }
 
         private PlayerSpawnDir nextSpawnDir;
 
@@ -59,9 +73,35 @@ namespace Roguelike
             SPAWN_EAST, SPAWN_NORTH, SPAWN_WEST, SPAWN_SOUTH, SPAWN_NONE
         }
 
-        void generateMapAndPlayer(string mapString, int HPStatus, PlayerSpawnDir spawnDir)
+        void generateMapAndPlayer(Hashtable mapInfo, PlayerSpawnDir spawnDir)
         {
+            // get map information from the hash table
+            string mapString = (string)mapInfo["map"];
+            rows = (int)mapInfo["row"];
+            columns = (int)mapInfo["column"];
+            currentStageHash = (string)mapInfo["hash"];
+            int HPStatus = Player.MAX_HP;
+
             string[] arrayMap = mapString.Split(',');
+
+            // get item information from the hash table
+            int[] itemCounts = new int[(int)(itemID.END + 1)];
+            int[] itemValues = new int[(int)(itemID.END + 1)];
+            for (int i = 0; i <= (int)(itemID.END); i++)
+            {
+                if (mapInfo.ContainsKey(i.ToString()))
+                {
+                    Hashtable itemTable = (Hashtable)mapInfo[i.ToString()];
+                    itemCounts[i] = (int)itemTable["items"];
+                    itemValues[i] = (int)itemTable["value"];
+                }
+                else
+                {
+                    itemCounts[i] = 0;
+                }
+            }
+
+            // find the gates
             int northGate = -111, southGate = -111, eastGate = -111, westGate = -111;
             for (int i = 0; i < columns; i++)
             {
@@ -125,7 +165,7 @@ namespace Roguelike
                         else tileIndex = 4;
                     }
 
-                    instantiateAndAdd(floorTiles[tileIndex], x, y, floorHolder);
+                    instantiateAndAdd(floorTiles[tileIndex], x, y, holders[(int)(holderID.FLOOR)]);
                 }
             }
 
@@ -134,7 +174,7 @@ namespace Roguelike
             List<Vector3> rockPositions = new List<Vector3>();
 
             // cliff, SW side of the map
-            instantiateAndAdd(cliffTiles[3], -1, -1, cliffHolder);
+            instantiateAndAdd(cliffTiles[3], -1, -1, holders[(int)(holderID.CLIFF)]);
             for (int y = -3; y <= -2; y++)
                 for (int x = -2; x <= 0; x++)
                     rockTilePositions.Add(new Vector3(x, y, 0));
@@ -142,7 +182,7 @@ namespace Roguelike
                 rockTilePositions.Add(new Vector3(-2, y, 0));
 
             // cliff, SE side of the map
-            instantiateAndAdd(cliffTiles[15], columns, -1, cliffHolder);
+            instantiateAndAdd(cliffTiles[15], columns, -1, holders[(int)(holderID.CLIFF)]);
             for (int y = -3; y <= -2; y++)
                 for (int x = columns-1; x<=columns+1; x++)
                     rockTilePositions.Add(new Vector3(x, y, 0));
@@ -150,14 +190,14 @@ namespace Roguelike
                 rockTilePositions.Add(new Vector3((columns + 1), y, 0));
 
             // cliff, NW side of the map
-            instantiateAndAdd(cliffTiles[7], -1, rows + 1, cliffHolder);
+            instantiateAndAdd(cliffTiles[7], -1, rows + 1, holders[(int)(holderID.CLIFF)]);
             for (int x = -2; x <= 0; x++)
                 rockTilePositions.Add(new Vector3(x, rows + 2, 0));
             for (int y = rows-1; y <= rows + 1; y++)
                 rockTilePositions.Add(new Vector3(-2, y, 0));
 
             // cliff, NE side of the map
-            instantiateAndAdd(cliffTiles[11], columns, rows + 1, cliffHolder);
+            instantiateAndAdd(cliffTiles[11], columns, rows + 1, holders[(int)(holderID.CLIFF)]);
             for (int x = columns - 1; x <= columns + 1; x++)
                 rockTilePositions.Add(new Vector3(x, rows + 2, 0));
             for (int y = rows-1; y <= rows + 1; y++)
@@ -168,19 +208,19 @@ namespace Roguelike
             {
                 if (x == southGate - 2)
                 {
-                    instantiateAndAdd(cliffTiles[2], x, -1, cliffHolder);
+                    instantiateAndAdd(cliffTiles[2], x, -1, holders[(int)(holderID.CLIFF)]);
                     for (int y = -3; y <= -2; y++)
-                        instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], x, y, cliffHolder);
+                        instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], x, y, holders[(int)(holderID.CLIFF)]);
                 }
                 else if (x == southGate + 2)
                 {
-                    instantiateAndAdd(cliffTiles[14], x, -1, cliffHolder);
+                    instantiateAndAdd(cliffTiles[14], x, -1, holders[(int)(holderID.CLIFF)]);
                     for (int y = -3; y <= -2; y++)
-                        instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], x, y, cliffHolder);
+                        instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], x, y, holders[(int)(holderID.CLIFF)]);
                 }
                 else if (Mathf.Abs(x - southGate) >= 3)
                 {
-                    instantiateAndAdd(cliffTiles[Random.Range(0, 2)], x, -1, cliffHolder);
+                    instantiateAndAdd(cliffTiles[Random.Range(0, 2)], x, -1, holders[(int)(holderID.CLIFF)]);
                     for (int y = -3; y <= -2; y++)
                         rockTilePositions.Add(new Vector3(x, y, 0));
                 }
@@ -191,17 +231,17 @@ namespace Roguelike
             {
                 if (x == northGate - 2)
                 {
-                    instantiateAndAdd(cliffTiles[6], x, rows + 1, cliffHolder);
-                    instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], x, rows + 2, cliffHolder);
+                    instantiateAndAdd(cliffTiles[6], x, rows + 1, holders[(int)(holderID.CLIFF)]);
+                    instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], x, rows + 2, holders[(int)(holderID.CLIFF)]);
                 }
                 else if (x == northGate + 2)
                 {
-                    instantiateAndAdd(cliffTiles[10], x, rows + 1, cliffHolder);
-                    instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], x, rows + 2, cliffHolder);
+                    instantiateAndAdd(cliffTiles[10], x, rows + 1, holders[(int)(holderID.CLIFF)]);
+                    instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], x, rows + 2, holders[(int)(holderID.CLIFF)]);
                 }
                 else if (Mathf.Abs(x - northGate) >= 3)
                 {
-                    instantiateAndAdd(cliffTiles[8 + Random.Range(0, 2)], x, rows + 1, cliffHolder);
+                    instantiateAndAdd(cliffTiles[8 + Random.Range(0, 2)], x, rows + 1, holders[(int)(holderID.CLIFF)]);
                     rockTilePositions.Add(new Vector3(x, rows + 2, 0));
                 }
             }
@@ -211,17 +251,17 @@ namespace Roguelike
             {
                 if (y == westGate + 3)
                 {
-                    instantiateAndAdd(cliffTiles[6], -1, y, cliffHolder);
-                    instantiateAndAdd(cliffTiles[8 + Random.Range(0, 2)], -2, y, cliffHolder);
+                    instantiateAndAdd(cliffTiles[6], -1, y, holders[(int)(holderID.CLIFF)]);
+                    instantiateAndAdd(cliffTiles[8 + Random.Range(0, 2)], -2, y, holders[(int)(holderID.CLIFF)]);
                 }
                 else if (y == westGate - 1)
                 {
-                    instantiateAndAdd(cliffTiles[2], -1, y, cliffHolder);
-                    instantiateAndAdd(cliffTiles[Random.Range(0, 2)], -2, y, cliffHolder);
+                    instantiateAndAdd(cliffTiles[2], -1, y, holders[(int)(holderID.CLIFF)]);
+                    instantiateAndAdd(cliffTiles[Random.Range(0, 2)], -2, y, holders[(int)(holderID.CLIFF)]);
                 }
                 else if (Mathf.Abs(y - (westGate + 1)) >= 3)
                 {
-                    instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], -1, y, cliffHolder);
+                    instantiateAndAdd(cliffTiles[4 + Random.Range(0, 2)], -1, y, holders[(int)(holderID.CLIFF)]);
                     rockTilePositions.Add(new Vector3(-2, y, 0));
                 }
             }
@@ -231,17 +271,17 @@ namespace Roguelike
             {
                 if (y == eastGate + 3)
                 {
-                    instantiateAndAdd(cliffTiles[10], columns, y, cliffHolder);
-                    instantiateAndAdd(cliffTiles[8 + Random.Range(0, 2)], columns + 1, y, cliffHolder);
+                    instantiateAndAdd(cliffTiles[10], columns, y, holders[(int)(holderID.CLIFF)]);
+                    instantiateAndAdd(cliffTiles[8 + Random.Range(0, 2)], columns + 1, y, holders[(int)(holderID.CLIFF)]);
                 }
                 else if (y == eastGate - 1)
                 {
-                    instantiateAndAdd(cliffTiles[14], columns, y, cliffHolder);
-                    instantiateAndAdd(cliffTiles[Random.Range(0, 2)], columns + 1, y, cliffHolder);
+                    instantiateAndAdd(cliffTiles[14], columns, y, holders[(int)(holderID.CLIFF)]);
+                    instantiateAndAdd(cliffTiles[Random.Range(0, 2)], columns + 1, y, holders[(int)(holderID.CLIFF)]);
                 }
                 else if (Mathf.Abs(y - (eastGate + 1)) >= 3)
                 {
-                    instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], columns, y, cliffHolder);
+                    instantiateAndAdd(cliffTiles[12 + Random.Range(0, 2)], columns, y, holders[(int)(holderID.CLIFF)]);
                     rockTilePositions.Add(new Vector3(columns + 1, y, 0));
                 }
             }
@@ -253,7 +293,7 @@ namespace Roguelike
                     rockFloorTiles[Random.Range(0, rockFloorTiles.Length)],
                     Mathf.FloorToInt(pos.x),
                     Mathf.FloorToInt(pos.y),
-                    cliffHolder
+                    holders[(int)(holderID.CLIFF)]
                 );
             }
 
@@ -265,7 +305,7 @@ namespace Roguelike
                     if (arrayMap[x + (rows - 1 - y) * columns] == "#")
                     {
                         Transform border = new GameObject("collider").transform;
-                        border.SetParent(borderColliderHolder);
+                        border.SetParent(holders[(int)(holderID.BOARD_COLLIDER)]);
                         border.Translate(x, y, 0);
                         border.gameObject.layer = LayerMask.NameToLayer("Object");
 
@@ -278,7 +318,7 @@ namespace Roguelike
                 for (int x = northGate-1; x <= northGate+1; x += 2)
                 {
                     Transform border = new GameObject("collider").transform;
-                    border.SetParent(borderColliderHolder);
+                    border.SetParent(holders[(int)(holderID.BOARD_COLLIDER)]);
                     border.Translate(x, rows + 1f, 0);
                     border.localScale += new Vector3(0, 2.0f, 0);
                     border.gameObject.layer = LayerMask.NameToLayer("Object");
@@ -291,7 +331,7 @@ namespace Roguelike
                 for (int x = southGate - 1; x <= southGate + 1; x += 2)
                 {
                     Transform border = new GameObject("collider").transform;
-                    border.SetParent(borderColliderHolder);
+                    border.SetParent(holders[(int)(holderID.BOARD_COLLIDER)]);
                     border.Translate(x, -2f, 0);
                     border.localScale += new Vector3(0, 2.0f, 0);
                     border.gameObject.layer = LayerMask.NameToLayer("Object");
@@ -304,7 +344,7 @@ namespace Roguelike
                 for (int y = eastGate - 1; y <= eastGate + 1; y += 2)
                 {
                     Transform border = new GameObject("collider").transform;
-                    border.SetParent(borderColliderHolder);
+                    border.SetParent(holders[(int)(holderID.BOARD_COLLIDER)]);
                     border.Translate(columns + 0.5f, y, 0);
                     border.localScale += new Vector3(1.0f, 0, 0);
                     border.gameObject.layer = LayerMask.NameToLayer("Object");
@@ -317,7 +357,7 @@ namespace Roguelike
                 for (int y = westGate - 1; y <= westGate + 1; y += 2)
                 {
                     Transform border = new GameObject("collider").transform;
-                    border.SetParent(borderColliderHolder);
+                    border.SetParent(holders[(int)(holderID.BOARD_COLLIDER)]);
                     border.Translate(-1.5f, y, 0);
                     border.localScale += new Vector3(1.0f, 0, 0);
                     border.gameObject.layer = LayerMask.NameToLayer("Object");
@@ -333,10 +373,34 @@ namespace Roguelike
                 {
                     if (arrayMap[x + (rows - 1 - y) * columns] == "b")
                     {
-                        instantiateAndAdd(blockTiles, x, y, 0, blockHolder);
-                    } else if (arrayMap[x + (rows - 1 - y) * columns] == "p")
+                        instantiateAndAdd(blockTiles, x, y, 0, holders[(int)(holderID.BLOCK)]);
+                    }
+                }
+            }
+
+            // item generation
+            for (int y = rows - 1; y >= 0; y--)
+            {
+                for (int x = 0; x < columns; x++)
+                {
+                    for (int itemIdx = (int)(itemID.START); itemIdx <= (int)(itemID.END); itemIdx++)
                     {
-                        instantiateAndAdd(potionTiles, x, y, 0, potionHolder);
+                        if (arrayMap[x + (rows - 1 - y) * columns] == itemIdx.ToString()
+                            && itemCounts[itemIdx] > 0)
+                        {
+                            switch ((itemID)itemIdx)
+                            {
+                                case itemID.POTION1:
+                                case itemID.POTION2:
+                                    Potion potion = ObjectFactory.createPotion(x, y, itemValues[itemIdx]);
+                                    potion.transform.SetParent(holders[(int)(holderID.POTION)]);
+                                    break;
+                                case itemID.WEAPON:
+                                    Weapon weapon = ObjectFactory.createWeapon(x, y, itemValues[itemIdx]);
+                                    weapon.transform.SetParent(holders[(int)(holderID.WEAPON)]);
+                                    break;
+                            }
+                        }
                     }
                 }
             }
@@ -398,7 +462,7 @@ namespace Roguelike
             if (player == null)
             {
                 player = ObjectFactory.createPlayer(playerX, playerY, HPStatus);
-                player.transform.SetParent(playerHolder);
+                player.transform.SetParent(holders[(int)(holderID.PLAYER)]);
             }
             else
             {
@@ -408,92 +472,51 @@ namespace Roguelike
 
         void BoardHolderInit()
         {
-            if (boardHolder == null)
+            Transform board_holder = holders[(int)(holderID.BOARD)];
+            if (board_holder == null)
             {
-                boardHolder = new GameObject("Board").transform;
-                boardHolder.localScale += new Vector3(1.0f / SQUARESIZE_PER_UNIT - 1.0f,
+                board_holder = new GameObject(holderNames[(int)(holderID.BOARD)]).transform;
+                board_holder.localScale += new Vector3(1.0f / SQUARESIZE_PER_UNIT - 1.0f,
                     1.0f / SQUARESIZE_PER_UNIT - 1.0f,
                     0.0f);
-                boardHolder.Translate(new Vector3(
+                board_holder.Translate(new Vector3(
                     (-rows / 2.0f + 0.5f) * SQUARESIZE_PER_UNIT,
                     (-columns / 2.0f + 0.5f) * SQUARESIZE_PER_UNIT,
                     0
                 ));
+                holders[(int)(holderID.BOARD)] = board_holder;
             }
-            if (floorHolder == null)
+            for (int i = (int)holderID.START; i <= (int)holderID.END; i++)
             {
-                floorHolder = new GameObject("Floors").transform;
-                floorHolder.SetParent(boardHolder);
-            }
-            if (cliffHolder == null)
-            {
-                cliffHolder = new GameObject("Cliffs").transform;
-                cliffHolder.SetParent(boardHolder);
-            }
-            if (borderColliderHolder == null)
-            {
-                borderColliderHolder = new GameObject("BorderColliders").transform;
-                borderColliderHolder.SetParent(boardHolder);
-            }
-            if (blockHolder == null)
-            {
-                blockHolder = new GameObject("Blocks").transform;
-                blockHolder.SetParent(boardHolder);
-            }
-            if (playerHolder == null)
-            {
-                playerHolder = new GameObject("Player").transform;
-                playerHolder.SetParent(boardHolder);
-            }
-            if (potionHolder == null)
-            {
-                potionHolder = new GameObject("Potion").transform;
-                potionHolder.SetParent(boardHolder);
+                // do not add new board holder into the board holder
+                if (i == (int)holderID.BOARD)
+                    continue;
+                
+                if (holders[i] == null)
+                {
+                    holders[i] = new GameObject(holderNames[i]).transform;
+                    holders[i].SetParent(board_holder);
+                }
             }
         }
 
         void BoardHolderClear()
         {
-            Transform[] lstChildren = floorHolder.GetComponentsInChildren<Transform>();
-            if (lstChildren != null)
+            for (int i = (int)holderID.START; i <= (int)holderID.END; i++)
             {
-                foreach (Transform t in lstChildren)
-                    Destroy(t.gameObject);
+                // do not destroy board holder object and player holder object
+                if (i == (int)holderID.BOARD || i == (int)holderID.PLAYER)
+                    continue;
+
+                Transform[] lstChildren = holders[i].GetComponentsInChildren<Transform>();
+                if (lstChildren != null)
+                {
+                    foreach (Transform t in lstChildren)
+                        Destroy(t.gameObject);
+                }
+                Destroy(holders[i]);
+                holders[i] = null;
             }
-            Destroy(floorHolder);
-            floorHolder = null;
-            lstChildren = cliffHolder.GetComponentsInChildren<Transform>();
-            if (lstChildren != null)
-            {
-                foreach (Transform t in lstChildren)
-                    Destroy(t.gameObject);
-            }
-            Destroy(cliffHolder);
-            cliffHolder = null;
-            lstChildren = borderColliderHolder.GetComponentsInChildren<Transform>();
-            if (lstChildren != null)
-            {
-                foreach (Transform t in lstChildren)
-                    Destroy(t.gameObject);
-            }
-            Destroy(borderColliderHolder);
-            borderColliderHolder = null;
-            lstChildren = potionHolder.GetComponentsInChildren<Transform>();
-            if (lstChildren != null)
-            {
-                foreach (Transform t in lstChildren)
-                    Destroy(t.gameObject);
-            }
-            Destroy(potionHolder);
-            potionHolder = null;
-            lstChildren = blockHolder.GetComponentsInChildren<Transform>();
-            if (lstChildren != null)
-            {
-                foreach (Transform t in lstChildren)
-                    Destroy(t.gameObject);
-            }
-            Destroy(blockHolder);
-            blockHolder = null;
         }
 
         void BoardSetup()
@@ -515,6 +538,14 @@ namespace Roguelike
                 foreach (string str in result.Keys)
                 {
                     Debug.Log(str + ": " + result[str]);
+                    if ((string)(result[str].ToString()) == "System.Collections.Hashtable")
+                    {
+                        Hashtable rr = result[str] as Hashtable;
+                        foreach (string strstr in rr.Keys)
+                        {
+                            Debug.Log(strstr + ": " + rr[strstr]);
+                        }
+                    }
                 }
                 if (result == null)
                 {
@@ -525,12 +556,7 @@ namespace Roguelike
                 {
                     // Receive String from server and generate room
                     Hashtable hashmap = (Hashtable)JSON.JsonDecode(request.response.Text);
-                    string mapString = (string) hashmap["map"];
-                    int rows = (int)hashmap["row"];
-                    int columns = (int)hashmap["column"];
-                    int hp = (int)hashmap["status"];
-                    currentStageHash = (string)hashmap["hash"];
-                    generateMapAndPlayer(mapString, hp, PlayerSpawnDir.SPAWN_NONE);
+                    generateMapAndPlayer(hashmap, PlayerSpawnDir.SPAWN_NONE);
                 }
             });
         }
@@ -598,15 +624,9 @@ namespace Roguelike
                 {
                     // Receive String from server and generate room
                     Hashtable hashmap = (Hashtable)JSON.JsonDecode(request.response.Text);
-                    string mapString = (string)hashmap["map"];
-                    int rows = (int)hashmap["row"];
-                    int columns = (int)hashmap["column"];
-                    int hp = (int)hashmap["status"];
-                    currentStageHash = (string)hashmap["hash"];
-
                     BoardHolderClear();
                     BoardHolderInit();
-                    generateMapAndPlayer(mapString, hp, nextSpawnDir);
+                    generateMapAndPlayer(hashmap, nextSpawnDir);
                 }
             });
         }

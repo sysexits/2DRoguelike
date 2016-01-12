@@ -144,6 +144,19 @@ namespace Roguelike
                     Destroy(hitObject);
                     hitObject = null;
                 }
+                else if (hitObject.tag == "Weapon")
+                {
+                    // if the hit object was a weapon, update this player's information
+                    transform.Translate(horizontal, vertical, 0f);
+                    m_posX += horizontal;
+                    m_posY += vertical;
+
+                    // send the hitted information to the server (TODO)
+
+                    // remove the potion
+                    Destroy(hitObject);
+                    hitObject = null;
+                }
             }
 
             // count 2++ => run
