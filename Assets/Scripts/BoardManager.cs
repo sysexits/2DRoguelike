@@ -404,9 +404,6 @@ namespace Roguelike
             {
                 player.Initialize(playerX, playerY, HPStatus);
             }
-
-            Debug.Log("player: (" + playerX + "," + playerY + ")");
-            Debug.Log("NEWS gate:" + northGate + "," + eastGate + "," + westGate + "," + southGate);
         }
 
         void BoardHolderInit()
@@ -609,7 +606,6 @@ namespace Roguelike
 
                     BoardHolderClear();
                     BoardHolderInit();
-                    Debug.Log("next spawn dir.:" + nextSpawnDir.ToString());
                     generateMapAndPlayer(mapString, hp, nextSpawnDir);
                 }
             });

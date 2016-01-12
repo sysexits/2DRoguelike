@@ -24,6 +24,9 @@ namespace Roguelike
         // the layer where the collision detection is checked
         public LayerMask objectLayer;
 
+        // maximum HP of this player
+        public static int MAX_HP = 200;
+
         // the box collider 2d attached to this game object
         private BoxCollider2D boxCollider;
 
@@ -123,6 +126,25 @@ namespace Roguelike
                         boardManager.gotoNextStage(Direction.SOUTH);
                 }
             }
+            else
+            {
+                GameObject hitObject = hit.collider.gameObject;
+                if (hitObject.tag == "Potion")
+                {
+                    // if the hit object was a potion, update this player's HP and position
+                    Potion potion = hitObject.GetComponent<Potion>();
+                    m_HPStatus = System.Math.Max(MAX_HP, m_HPStatus + potion.healAmount);
+                    transform.Translate(horizontal, vertical, 0f);
+                    m_posX += horizontal;
+                    m_posY += vertical;
+
+                    // send the hitted information to the server (TODO)
+
+                    // remove the potion
+                    Destroy(hitObject);
+                    hitObject = null;
+                }
+            }
 
             // count 2++ => run
 
@@ -193,7 +215,7 @@ namespace Roguelike
                 return true;
             }
 
-            // the casw when the line cast hit something
+            // the case when the line cast hit something
             return false;
         }
     }
