@@ -85,6 +85,8 @@ namespace Roguelike
             PeerPlayer peer = ObjectFactory.createPeer(posx, posy);
             peer.username = username;
             peer.transform.SetParent(holders[(int)holderID.PEER]);
+
+            peerPlayers.Add(peer);
         }
 
         private enum PlayerSpawnDir
@@ -678,10 +680,15 @@ namespace Roguelike
                             System.Int32.Parse(data["ypos"].ToString()),
                             data["username"].ToString()
                         );
+                        GameObject peer1 = new GameObject("peer UDP client");
+                        UDPClient peerClient = peer1.AddComponent<UDPClient>();
+                        peerClient.InitiateSocket(data["ip"].ToString(), 12346);
+                        peerUDPClients.Add(peer1);
                         break;
                     case "move":
                         foreach (PeerPlayer peer in peerPlayers)
                         {
+                            Debug.Log("peer username = " + peer.username);
                             if (peer.username == data["username"].ToString())
                             {
                                 peer.Initialize(

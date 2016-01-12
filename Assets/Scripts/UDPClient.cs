@@ -12,6 +12,7 @@ public class UDPClient : MonoBehaviour {
 
     public void InitiateSocket(string ipAddr, int port = 41234)
     {
+        Debug.Log("ip = " + ipAddr);
         if(sock == null)
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         endpoint_addr = IPAddress.Parse(ipAddr);
