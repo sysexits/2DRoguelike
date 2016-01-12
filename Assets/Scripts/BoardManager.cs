@@ -548,6 +548,16 @@ namespace Roguelike
                 data.Add("ypos", playerY);
                 peerClient.sendJSONObject(data);
             }
+            UDPClient serverClient = GetComponent<UDPClient>();
+
+            Hashtable data1 = new Hashtable();
+            data1.Add("action", "move");
+            data1.Add("hash", currentStageHash);
+            data1.Add("username", SystemInfo.deviceUniqueIdentifier);
+            data1.Add("ip", getMyIP());
+            data1.Add("xpos", playerX);
+            data1.Add("ypos", playerY);
+            serverClient.sendJSONObject(data1);
         }
 
         void BoardHolderInit()

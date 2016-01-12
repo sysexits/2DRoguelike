@@ -134,9 +134,9 @@ namespace Roguelike
                         boardManager.gotoNextStage(Direction.NORTH);
                     else if (m_posY == 0)
                         boardManager.gotoNextStage(Direction.SOUTH);
+                    
+                    boardManager.sendMove(m_posX, m_posY);
                 }
-
-                boardManager.sendMove(m_posX, m_posY);
             }
             else
             {
