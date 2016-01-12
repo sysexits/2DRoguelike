@@ -25,7 +25,7 @@ namespace Roguelike
         public LayerMask objectLayer;
 
         // maximum HP of this player
-        public static int MAX_HP = 200;
+        public static int MAX_HP = 100;
 
         // the box collider 2d attached to this game object
         private BoxCollider2D boxCollider;
@@ -33,9 +33,19 @@ namespace Roguelike
         // member variables for this player
         private int m_posX;
         private int m_posY;
-        private int m_HPStatus;
+
+        public int m_HP
+        {
+            get; private set;
+        }
+        public int m_AP
+        {
+            get; private set;
+        }
 
         private BoardManager boardManager = null;
+
+        private UDPClient client = null;
 
         void Start()
         {
@@ -133,29 +143,49 @@ namespace Roguelike
                 {
                     // if the hit object was a potion, update this player's HP and position
                     Potion potion = hitObject.GetComponent<Potion>();
-                    m_HPStatus = System.Math.Max(MAX_HP, m_HPStatus + potion.healAmount);
+                    m_HP = System.Math.Min(m_HP + potion.healAmount, MAX_HP);
                     transform.Translate(horizontal, vertical, 0f);
                     m_posX += horizontal;
                     m_posY += vertical;
 
-                    // send the hitted information to the server (TODO)
+                    // send the hitted information to the server
+                    Hashtable data = new Hashtable();
+                    data.Add("username", SystemInfo.deviceUniqueIdentifier);
+                    data.Add("hash", boardManager.currentStageHash);
+                    data.Add("action", "consume");
+                    data.Add("consume", potion.m_potionID.ToString());
 
+                    client.sendJSONObject(data);
+                    
                     // remove the potion
                     Destroy(hitObject);
                     hitObject = null;
+
+                    Debug.Log("HP = " + m_HP + ", AP = " + m_AP);
                 }
                 else if (hitObject.tag == "Weapon")
                 {
                     // if the hit object was a weapon, update this player's information
+                    Weapon weapon = hitObject.GetComponent<Weapon>();
+                    m_AP += weapon.value;
                     transform.Translate(horizontal, vertical, 0f);
                     m_posX += horizontal;
                     m_posY += vertical;
 
                     // send the hitted information to the server (TODO)
+                    Hashtable data = new Hashtable();
+                    data.Add("username", SystemInfo.deviceUniqueIdentifier);
+                    data.Add("hash", boardManager.currentStageHash);
+                    data.Add("action", "consume");
+                    data.Add("consume", weapon.m_itemID.ToString());
+
+                    client.sendJSONObject(data);
 
                     // remove the potion
                     Destroy(hitObject);
                     hitObject = null;
+
+                    Debug.Log("HP = " + m_HP + ", AP = " + m_AP);
                 }
             }
 
@@ -196,15 +226,20 @@ namespace Roguelike
         }
 
         // initialization method
-        public void Initialize(int posX, int posY, int HPStatus)
+        public void Initialize(int posX, int posY, int HPStatus, int APStatus)
         {
             m_posX = posX;
             m_posY = posY;
-            m_HPStatus = HPStatus;
+            m_HP = HPStatus;
+            m_AP = APStatus;
             boxCollider = GetComponent<BoxCollider2D>();
             if (boardManager == null)
             {
                 boardManager = GameObject.Find("BoardManager").GetComponent<BoardManager>();
+            }
+            if (client == null)
+            {
+                client = boardManager.GetComponent<UDPClient>();
             }
             transform.position = new Vector3(posX, posY, 0);
         }

@@ -43,7 +43,10 @@ namespace Roguelike
         private Player player = null;
 
         // hash value of the current stage
-        private string currentStageHash = null;
+        public string currentStageHash
+        {
+            get; private set;
+        }
 
         // enum of items
         public enum itemID
@@ -80,7 +83,18 @@ namespace Roguelike
             rows = (int)mapInfo["row"];
             columns = (int)mapInfo["column"];
             currentStageHash = (string)mapInfo["hash"];
-            int HPStatus = Player.MAX_HP;
+
+            int HPStatus, APStatus;
+            if (player != null)
+            {
+                HPStatus = player.m_HP;
+                APStatus = player.m_AP;
+            }
+            else
+            {
+                HPStatus = (int)mapInfo["hp"];
+                APStatus = (int)mapInfo["ap"];
+            }
 
             string[] arrayMap = mapString.Split(',');
 
@@ -391,12 +405,15 @@ namespace Roguelike
                             switch ((itemID)itemIdx)
                             {
                                 case itemID.POTION1:
+                                    Potion potion1 = ObjectFactory.createPotion(x, y, itemValues[itemIdx], (int)(itemID.POTION1));
+                                    potion1.transform.SetParent(holders[(int)(holderID.POTION)]);
+                                    break;
                                 case itemID.POTION2:
-                                    Potion potion = ObjectFactory.createPotion(x, y, itemValues[itemIdx]);
-                                    potion.transform.SetParent(holders[(int)(holderID.POTION)]);
+                                    Potion potion2 = ObjectFactory.createPotion(x, y, itemValues[itemIdx], (int)(itemID.POTION2));
+                                    potion2.transform.SetParent(holders[(int)(holderID.POTION)]);
                                     break;
                                 case itemID.WEAPON:
-                                    Weapon weapon = ObjectFactory.createWeapon(x, y, itemValues[itemIdx]);
+                                    Weapon weapon = ObjectFactory.createWeapon(x, y, itemValues[itemIdx], (int)(itemID.WEAPON));
                                     weapon.transform.SetParent(holders[(int)(holderID.WEAPON)]);
                                     break;
                             }
@@ -461,12 +478,12 @@ namespace Roguelike
             }
             if (player == null)
             {
-                player = ObjectFactory.createPlayer(playerX, playerY, HPStatus);
+                player = ObjectFactory.createPlayer(playerX, playerY, HPStatus, APStatus);
                 player.transform.SetParent(holders[(int)(holderID.PLAYER)]);
             }
             else
             {
-                player.Initialize(playerX, playerY, HPStatus);
+                player.Initialize(playerX, playerY, HPStatus, APStatus);
             }
         }
 
@@ -614,6 +631,14 @@ namespace Roguelike
                 foreach (string str in result.Keys)
                 {
                     Debug.Log(str + ": " + result[str]);
+                    if ((string)(result[str].ToString()) == "System.Collections.Hashtable")
+                    {
+                        Hashtable rr = result[str] as Hashtable;
+                        foreach (string strstr in rr.Keys)
+                        {
+                            Debug.Log(strstr + ": " + rr[strstr]);
+                        }
+                    }
                 }
                 if (result == null)
                 {

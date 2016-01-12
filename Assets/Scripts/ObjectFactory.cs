@@ -23,7 +23,7 @@ namespace Roguelike
             instance = this;
         }
 
-        public static Player createPlayer(int posX, int posY, int HPStatus)
+        public static Player createPlayer(int posX, int posY, int HPStatus, int APStatus)
         {
             GameObject playerObject = (Instantiate(
                 instance.playerPrefab,
@@ -31,11 +31,11 @@ namespace Roguelike
                 Quaternion.identity
             ) as GameObject);
             Player player = playerObject.GetComponent<Player>();
-            player.Initialize(posX, posY, HPStatus);
+            player.Initialize(posX, posY, HPStatus, APStatus);
             return player;
         }
 
-        public static Potion createPotion(int posX, int posY, int healAmount)
+        public static Potion createPotion(int posX, int posY, int healAmount, int itemID)
         {
             GameObject potionObject = (Instantiate(
                 instance.potionPrefab,
@@ -43,11 +43,11 @@ namespace Roguelike
                 Quaternion.identity
             ) as GameObject);
             Potion potion = potionObject.GetComponent<Potion>();
-            potion.Initialize(posX, posY, healAmount);
+            potion.Initialize(posX, posY, healAmount, itemID);
             return potion;
         }
 
-        public static Weapon createWeapon(int posX, int posY, int value)
+        public static Weapon createWeapon(int posX, int posY, int value, int itemID)
         {
             GameObject weaponObject = (Instantiate(
                 instance.weaponPrefab,
@@ -55,7 +55,7 @@ namespace Roguelike
                 Quaternion.identity
             ) as GameObject);
             Weapon weapon = weaponObject.GetComponent<Weapon>();
-            weapon.Initialize(posX, posY, value);
+            weapon.Initialize(posX, posY, value, itemID);
             return weapon;
         }
     }

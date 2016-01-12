@@ -9,12 +9,17 @@ public class Potion : MonoBehaviour {
     }
     public int m_posX;
     public int m_posY;
+    public int m_potionID
+    {
+        get; private set;
+    }
 
-    public void Initialize(int posX, int posY, int amount)
+    public void Initialize(int posX, int posY, int amount, int potionID)
     {
         healAmount = amount;
         m_posX = posX;
         m_posY = posY;
+        m_potionID = potionID;
         transform.position = new Vector3(m_posX, m_posY, 0);
     }
 
