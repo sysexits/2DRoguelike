@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Roguelike
 {
@@ -28,12 +29,12 @@ namespace Roguelike
         
         public enum holderID
         {
-            BOARD, FLOOR, CLIFF, BOARD_COLLIDER, PLAYER, BLOCK, POTION, WEAPON,
+            BOARD, FLOOR, CLIFF, BOARD_COLLIDER, PLAYER, BLOCK, POTION, WEAPON, PEER,
             START = BOARD, END = WEAPON
         }
         public string[] holderNames =
         {
-            "Board", "Floors", "Cliffs", "Colliders", "Player", "Blocks", "Potions", "Weapons"
+            "Board", "Floors", "Cliffs", "Colliders", "Player", "Blocks", "Potions", "Weapons", "Peer",
         };
 
         // list of game objects which hold game objects for organization.
@@ -57,6 +58,12 @@ namespace Roguelike
 
         private PlayerSpawnDir nextSpawnDir;
 
+        private UDPListener listener;
+
+        private List<string> peerIPList;
+        private List<GameObject> peerUDPClients;
+        private List<PeerPlayer> peerPlayers;
+
         private void instantiateAndAdd(GameObject objToClone, int posX, int posY, Transform objParent)
         {
             instantiateAndAdd(objToClone, posX, posY, 0, objParent);
@@ -69,6 +76,12 @@ namespace Roguelike
                 Quaternion.identity
             ) as GameObject;
             tile.transform.SetParent(objParent);
+        }
+
+        public void generateEnemy(int posx, int posy)
+        {
+            PeerPlayer peer = ObjectFactory.createPeer(posx, posy);
+            peer.transform.SetParent(holders[(int)holderID.PEER]);
         }
 
         private enum PlayerSpawnDir
@@ -485,6 +498,33 @@ namespace Roguelike
             {
                 player.Initialize(playerX, playerY, HPStatus, APStatus);
             }
+
+            // get peer's ip addresses who are in this area!
+            peerIPList.Clear();
+            ArrayList listIPs = (ArrayList)mapInfo["ips"];
+            foreach (string ip in listIPs)
+            {
+                if (ip != getMyIP())
+                    peerIPList.Add(ip);
+            }
+
+            // peer player initialization
+            peerUDPClients.Clear();
+            foreach (string ip in peerIPList)
+            {
+                GameObject peer = new GameObject("peer UDP client");
+                UDPClient peerClient = peer.AddComponent<UDPClient>();
+                peerClient.InitiateSocket(ip, 12345);
+                peerUDPClients.Add(peer);
+
+                Hashtable data = new Hashtable();
+                data.Add("action", "myinfo");
+                data.Add("username", SystemInfo.deviceUniqueIdentifier);
+                data.Add("ip", getMyIP());
+                data.Add("xpos", playerX);
+                data.Add("ypos", playerY);
+                peerClient.sendJSONObject(data);
+            }
         }
 
         void BoardHolderInit()
@@ -541,6 +581,11 @@ namespace Roguelike
             Hashtable data = new Hashtable();
             data.Add("username", SystemInfo.deviceUniqueIdentifier);
 
+            string strHostName = Dns.GetHostName();
+            IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+            IPAddress[] addr = ipEntry.AddressList;
+            data.Add("ip", addr[addr.Length - 1].ToString());
+
             Debug.Log("Send:");
             foreach (string str in data.Keys)
             {
@@ -581,6 +626,13 @@ namespace Roguelike
         // Use this for initialization
         void Start()
         {
+            peerIPList = new List<string>();
+            peerUDPClients = new List<GameObject>();
+            peerPlayers = new List<PeerPlayer>();
+            GetComponent<UDPClient>().InitiateSocket("143.248.139.70");
+
+            listener = new UDPListener();
+
             BoardHolderInit();
             BoardSetup();
         }
@@ -592,6 +644,30 @@ namespace Roguelike
             {
                 Application.Quit();
             }
+        }
+
+        // when this application is going to end...
+        void OnApplicationQuit()
+        {
+            // send EXIT signal to server
+            Hashtable data = new Hashtable();
+
+            string strHostName = Dns.GetHostName();
+            IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+            IPAddress[] addr = ipEntry.AddressList;
+            data.Add("ip", addr[addr.Length - 1].ToString());
+            data.Add("action", "exit");
+            data.Add("hash", currentStageHash);
+
+            GetComponent<UDPClient>().sendJSONObject(data);
+        }
+
+        private string getMyIP()
+        {
+            string strHostName = Dns.GetHostName();
+            IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+            IPAddress[] addr = ipEntry.AddressList;
+            return addr[addr.Length - 1].ToString();
         }
 
         public void gotoNextStage(Player.Direction dir)
@@ -616,6 +692,11 @@ namespace Roguelike
             data.Add("entrance", ((int)dir).ToString());
             data.Add("hash", currentStageHash);
             data.Add("username", SystemInfo.deviceUniqueIdentifier);
+
+            string strHostName = Dns.GetHostName();
+            IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+            IPAddress[] addr = ipEntry.AddressList;
+            data.Add("ip", addr[addr.Length - 1].ToString());
 
             Debug.Log("Send:");
             foreach (string str in data.Keys)

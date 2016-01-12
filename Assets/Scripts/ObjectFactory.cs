@@ -17,6 +17,9 @@ namespace Roguelike
         // Weapon prefab
         public GameObject weaponPrefab;
 
+        // Peer Player prefab
+        public GameObject peerPrefab;
+        
         // Use this for initialization
         void Start()
         {
@@ -57,6 +60,18 @@ namespace Roguelike
             Weapon weapon = weaponObject.GetComponent<Weapon>();
             weapon.Initialize(posX, posY, value, itemID);
             return weapon;
+        }
+
+        public static PeerPlayer createPeer(int posX, int posY)
+        {
+            GameObject peerObject = (Instantiate(
+                instance.weaponPrefab,
+                new Vector3(posX, posY, 0),
+                Quaternion.identity
+            ) as GameObject);
+            PeerPlayer peer = peerObject.GetComponent<PeerPlayer>();
+            peer.Initialize(posX, posY);
+            return peer;
         }
     }
 }

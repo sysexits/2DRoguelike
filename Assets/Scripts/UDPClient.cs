@@ -7,22 +7,15 @@ using System.Text;
 
 public class UDPClient : MonoBehaviour {
     public Socket sock;
-    public string ipAddress = "143.248.139.70";
     IPAddress endpoint_addr;
     IPEndPoint endpoint;
 
-    void Start()
+    public void InitiateSocket(string ipAddr, int port = 41234)
     {
         if(sock == null)
             sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        endpoint_addr = IPAddress.Parse(ipAddress);
-        endpoint = new IPEndPoint(endpoint_addr, 41234);
-    }
-
-    void Awake()
-    {
-        if (sock == null)
-            sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        endpoint_addr = IPAddress.Parse(ipAddr);
+        endpoint = new IPEndPoint(endpoint_addr, port);
     }
 
     void Update()
