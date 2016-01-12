@@ -535,7 +535,7 @@ namespace Roguelike
         {
             foreach (GameObject peer in peerUDPClients)
             {
-                UDPClient peerClient = peer.AddComponent<UDPClient>();
+                UDPClient peerClient = peer.GetComponent<UDPClient>();
                 
                 Hashtable data = new Hashtable();
                 data.Add("action", "move");
