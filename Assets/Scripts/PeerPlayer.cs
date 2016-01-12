@@ -5,6 +5,8 @@ public class PeerPlayer : MonoBehaviour {
     public int m_posX;
     public int m_posY;
 
+    public string username;
+
     // sprites for moving: W S E N
     public enum Direction
     {

@@ -30,11 +30,11 @@ namespace Roguelike
         public enum holderID
         {
             BOARD, FLOOR, CLIFF, BOARD_COLLIDER, PLAYER, BLOCK, POTION, WEAPON, PEER,
-            START = BOARD, END = WEAPON
+            START = BOARD, END = PEER
         }
         public string[] holderNames =
-        {
-            "Board", "Floors", "Cliffs", "Colliders", "Player", "Blocks", "Potions", "Weapons", "Peer",
+        {  
+            "Board", "Floors", "Cliffs", "Colliders", "Player", "Blocks", "Potions", "Weapons", "Peer"
         };
 
         // list of game objects which hold game objects for organization.
@@ -63,6 +63,8 @@ namespace Roguelike
         private List<string> peerIPList;
         private List<GameObject> peerUDPClients;
         private List<PeerPlayer> peerPlayers;
+
+        public List<Hashtable> actionQueue;
 
         private void instantiateAndAdd(GameObject objToClone, int posX, int posY, Transform objParent)
         {
@@ -527,6 +529,25 @@ namespace Roguelike
             }
         }
 
+        public void sendMove(int playerX, int playerY)
+        {
+            foreach (string ip in peerIPList)
+            {
+                GameObject peer = new GameObject("peer UDP client");
+                UDPClient peerClient = peer.AddComponent<UDPClient>();
+                peerClient.InitiateSocket(ip, 12345);
+                peerUDPClients.Add(peer);
+
+                Hashtable data = new Hashtable();
+                data.Add("action", "myinfo");
+                data.Add("username", SystemInfo.deviceUniqueIdentifier);
+                data.Add("ip", getMyIP());
+                data.Add("xpos", playerX);
+                data.Add("ypos", playerY);
+                peerClient.sendJSONObject(data);
+            }
+        }
+
         void BoardHolderInit()
         {
             Transform board_holder = holders[(int)(holderID.BOARD)];
@@ -551,6 +572,8 @@ namespace Roguelike
                 
                 if (holders[i] == null)
                 {
+                    Debug.Log("idx = " + i);
+                    Debug.Log(holderNames.Length);
                     holders[i] = new GameObject(holderNames[i]).transform;
                     holders[i].SetParent(board_holder);
                 }
@@ -629,6 +652,7 @@ namespace Roguelike
             peerIPList = new List<string>();
             peerUDPClients = new List<GameObject>();
             peerPlayers = new List<PeerPlayer>();
+            actionQueue = new List<Hashtable>();
             GetComponent<UDPClient>().InitiateSocket("143.248.139.70");
 
             listener = new UDPListener();
@@ -643,6 +667,33 @@ namespace Roguelike
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 Application.Quit();
+            }
+            
+            if (actionQueue.Count > 0)
+            {
+                Hashtable data = actionQueue[0];
+                switch (data["action"].ToString())
+                {
+                    case "myinfo":
+                        generateEnemy(
+                            System.Int32.Parse(data["xpos"].ToString()),
+                            System.Int32.Parse(data["ypos"].ToString())
+                        );
+                        break;
+                    case "move":
+                        foreach (PeerPlayer peer in peerPlayers)
+                        {
+                            if (peer.username == data["username"].ToString())
+                            {
+                                peer.Initialize(
+                                    System.Int32.Parse(data["xpos"].ToString()),
+                                    System.Int32.Parse(data["ypos"].ToString())
+                                );
+                            }
+                        }
+                        break;
+                }
+                actionQueue.Remove(data);
             }
         }
 

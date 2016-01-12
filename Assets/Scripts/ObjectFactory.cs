@@ -65,7 +65,7 @@ namespace Roguelike
         public static PeerPlayer createPeer(int posX, int posY)
         {
             GameObject peerObject = (Instantiate(
-                instance.weaponPrefab,
+                instance.peerPrefab,
                 new Vector3(posX, posY, 0),
                 Quaternion.identity
             ) as GameObject);
