@@ -702,7 +702,7 @@ namespace Roguelike
                         data2.Add("ip", getMyIP());
                         data2.Add("xpos", player.m_posX);
                         data2.Add("ypos", player.m_posY);
-                        peerClient.sendJSONObject(data);
+                        peerClient.sendJSONObject(data2);
 
                         break;
                     case "myinfo2":
@@ -718,7 +718,7 @@ namespace Roguelike
                             Debug.Log("peer username = " + peer.username);
                             if (peer.username == data["username"].ToString())
                             {
-                                peer.Initialize(
+                                peer.Move(
                                     System.Int32.Parse(data["xpos"].ToString()),
                                     System.Int32.Parse(data["ypos"].ToString())
                                 );
