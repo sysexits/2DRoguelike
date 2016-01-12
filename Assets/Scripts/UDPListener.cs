@@ -10,7 +10,7 @@ namespace Roguelike
 {
     public class UDPListener : MonoBehaviour
     {
-        private const int listenPort = 12345;
+        private const int listenPort = 12346;
 
         UdpClient listener;
         IPEndPoint groupEP;

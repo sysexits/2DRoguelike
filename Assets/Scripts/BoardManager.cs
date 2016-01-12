@@ -80,9 +80,10 @@ namespace Roguelike
             tile.transform.SetParent(objParent);
         }
 
-        public void generateEnemy(int posx, int posy)
+        public void generateEnemy(int posx, int posy, string username)
         {
             PeerPlayer peer = ObjectFactory.createPeer(posx, posy);
+            peer.username = username;
             peer.transform.SetParent(holders[(int)holderID.PEER]);
         }
 
@@ -516,11 +517,12 @@ namespace Roguelike
             {
                 GameObject peer = new GameObject("peer UDP client");
                 UDPClient peerClient = peer.AddComponent<UDPClient>();
-                peerClient.InitiateSocket(ip, 12345);
+                peerClient.InitiateSocket(ip, 12346);
                 peerUDPClients.Add(peer);
 
                 Hashtable data = new Hashtable();
                 data.Add("action", "myinfo");
+                data.Add("hash", currentStageHash);
                 data.Add("username", SystemInfo.deviceUniqueIdentifier);
                 data.Add("ip", getMyIP());
                 data.Add("xpos", playerX);
@@ -531,15 +533,13 @@ namespace Roguelike
 
         public void sendMove(int playerX, int playerY)
         {
-            foreach (string ip in peerIPList)
+            foreach (GameObject peer in peerUDPClients)
             {
-                GameObject peer = new GameObject("peer UDP client");
                 UDPClient peerClient = peer.AddComponent<UDPClient>();
-                peerClient.InitiateSocket(ip, 12345);
-                peerUDPClients.Add(peer);
-
+                
                 Hashtable data = new Hashtable();
-                data.Add("action", "myinfo");
+                data.Add("action", "move");
+                data.Add("hash", currentStageHash);
                 data.Add("username", SystemInfo.deviceUniqueIdentifier);
                 data.Add("ip", getMyIP());
                 data.Add("xpos", playerX);
@@ -572,8 +572,6 @@ namespace Roguelike
                 
                 if (holders[i] == null)
                 {
-                    Debug.Log("idx = " + i);
-                    Debug.Log(holderNames.Length);
                     holders[i] = new GameObject(holderNames[i]).transform;
                     holders[i].SetParent(board_holder);
                 }
@@ -677,7 +675,8 @@ namespace Roguelike
                     case "myinfo":
                         generateEnemy(
                             System.Int32.Parse(data["xpos"].ToString()),
-                            System.Int32.Parse(data["ypos"].ToString())
+                            System.Int32.Parse(data["ypos"].ToString()),
+                            data["username"].ToString()
                         );
                         break;
                     case "move":
