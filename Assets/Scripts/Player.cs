@@ -167,7 +167,7 @@ namespace Roguelike
                 {
                     // if the hit object was a weapon, update this player's information
                     Weapon weapon = hitObject.GetComponent<Weapon>();
-                    m_AP += weapon.value;
+                    m_AP = weapon.value;
                     transform.Translate(horizontal, vertical, 0f);
                     m_posX += horizontal;
                     m_posY += vertical;
